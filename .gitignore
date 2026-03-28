@@ -1,0 +1,13 @@
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.ipynb_checkpoints/
+*.egg-info/
+
+repo_study/**/.git/
+repo_study/LAVIS/cache/coco/images/
+repo_study/LAVIS/output/

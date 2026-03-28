@@ -1,0 +1,65 @@
+model:
+  arch: blip2
+  model_type: pretrain_vitL
+  load_pretrained: false
+  load_finetuned: false
+  vit_model: "clip_L"
+  image_size: 224
+  freeze_vit: true
+  use_grad_checkpoint: false
+  vit_precision: "fp16"
+  num_query_token: 32
+
+datasets:
+  coco_caption:
+    vis_processor:
+      train:
+        name: "blip2_image_train"
+        image_size: 224
+      eval:
+        name: "blip_image_eval"
+        image_size: 224
+    text_processor:
+      train:
+        name: "blip_caption"
+      eval:
+        name: "blip_caption"
+    build_info:
+      annotations:
+        train:
+          url: "D:/Purdue/Courses/04. Spring 2026 ECE 59500-073 LEC/Term Paper/repo_study/LAVIS/cache/coco/annotations/coco_karpathy_train_small.json"
+          storage: "D:/Purdue/Courses/04. Spring 2026 ECE 59500-073 LEC/Term Paper/repo_study/LAVIS/cache/coco/annotations/coco_karpathy_train_small.json"
+        val:
+          url: "D:/Purdue/Courses/04. Spring 2026 ECE 59500-073 LEC/Term Paper/repo_study/LAVIS/cache/coco/annotations/coco_karpathy_val_small.json"
+          storage: "D:/Purdue/Courses/04. Spring 2026 ECE 59500-073 LEC/Term Paper/repo_study/LAVIS/cache/coco/annotations/coco_karpathy_val_small.json"
+        test:
+          url: "D:/Purdue/Courses/04. Spring 2026 ECE 59500-073 LEC/Term Paper/repo_study/LAVIS/cache/coco/annotations/coco_karpathy_test_small.json"
+          storage: "D:/Purdue/Courses/04. Spring 2026 ECE 59500-073 LEC/Term Paper/repo_study/LAVIS/cache/coco/annotations/coco_karpathy_test_small.json"
+      images:
+        storage: "D:/Purdue/Courses/04. Spring 2026 ECE 59500-073 LEC/Term Paper/repo_study/LAVIS/cache/coco/images"
+
+run:
+  task: image_text_pretrain
+  lr_sched: "linear_warmup_cosine_lr"
+  init_lr: 1e-4
+  min_lr: 1e-5
+  warmup_lr: 1e-6
+  warmup_steps: 50
+  weight_decay: 0.05
+  max_epoch: 1
+  batch_size_train: 2
+  batch_size_eval: 2
+  accum_grad_iters: 16
+  num_workers: 2
+  seed: 42
+  output_dir: "output/blip2_repro/stage1_local"
+  amp: true
+  resume_ckpt_path: null
+  evaluate: false
+  train_splits: ["train"]
+  valid_splits: []
+  test_splits: []
+  device: "cuda"
+  world_size: 1
+  dist_url: "env://"
+  distributed: false

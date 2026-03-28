@@ -1,0 +1,83 @@
+{
+  "captured_at": "2026-03-28T04:50:00-04:00",
+  "interpreter_policy": "workspace venv only",
+  "workspace_root": "D:\\Purdue\\Courses\\04. Spring 2026 ECE 59500-073 LEC\\Term Paper",
+  "python": {
+    "executable": "D:\\Purdue\\Courses\\04. Spring 2026 ECE 59500-073 LEC\\Term Paper\\.venv\\Scripts\\python.exe",
+    "version": "3.10.11 (tags/v3.10.11:7d4cc5a, Apr  5 2023, 00:38:17) [MSC v.1929 64 bit (AMD64)]",
+    "platform": "Windows-10-10.0.26200-SP0"
+  },
+  "pip_version": "pip 26.0.1 from D:\\Purdue\\Courses\\04. Spring 2026 ECE 59500-073 LEC\\Term Paper\\.venv\\lib\\site-packages\\pip (python 3.10)",
+  "os": {
+    "caption": "Microsoft Windows 11 Education",
+    "version": "10.0.26200",
+    "architecture": "64-bit"
+  },
+  "drive": {
+    "name": "D",
+    "free_bytes": 183440621568,
+    "used_bytes": 316804255744
+  },
+  "torch": {
+    "version": "2.4.1+cu121",
+    "cuda_available": true,
+    "device_name": "NVIDIA GeForce RTX 3070"
+  },
+  "gpu": {
+    "name": "NVIDIA GeForce RTX 3070",
+    "driver_version": "591.86",
+    "memory_total": "8192 MiB"
+  },
+  "java": {
+    "fresh_shell_on_path": false,
+    "executable": "C:\\Program Files\\Eclipse Adoptium\\jre-8.0.482.8-hotspot\\bin\\java.exe",
+    "version_lines": [
+      "openjdk version \"1.8.0_482\"",
+      "OpenJDK Runtime Environment (Temurin)(build 1.8.0_482-b08)",
+      "OpenJDK 64-Bit Server VM (Temurin)(build 25.482-b08, mixed mode)"
+    ]
+  },
+  "working_directories": {
+    "lavis_root": "D:\\Purdue\\Courses\\04. Spring 2026 ECE 59500-073 LEC\\Term Paper\\repo_study\\LAVIS",
+    "blip2_repro": "D:\\Purdue\\Courses\\04. Spring 2026 ECE 59500-073 LEC\\Term Paper\\blip2_repro",
+    "docs_root": "D:\\Purdue\\Courses\\04. Spring 2026 ECE 59500-073 LEC\\Term Paper\\docs\\blip2",
+    "logs_root": "D:\\Purdue\\Courses\\04. Spring 2026 ECE 59500-073 LEC\\Term Paper\\logs\\blip2",
+    "metrics_root": "D:\\Purdue\\Courses\\04. Spring 2026 ECE 59500-073 LEC\\Term Paper\\metrics\\blip2"
+  },
+  "imports": {
+    "lavis": true,
+    "decord": true,
+    "fairscale": true,
+    "pycocotools": true,
+    "open3d": true,
+    "python_magic": true
+  },
+  "annotations": {
+    "coco_karpathy_train_small.json": 10000,
+    "coco_karpathy_val_small.json": 1000,
+    "coco_karpathy_test_small.json": 1000,
+    "sample_image_relative_path": "val2014/COCO_val2014_000000293244.jpg"
+  },
+  "images": {
+    "root": "D:\\Purdue\\Courses\\04. Spring 2026 ECE 59500-073 LEC\\Term Paper\\repo_study\\LAVIS\\cache\\coco\\images",
+    "train2014_count": 7066,
+    "train2014_size_bytes": 1148062726,
+    "val2014_count": 4605,
+    "val2014_size_bytes": 754048201,
+    "sample_image_exists": true,
+    "sample_image_width": 640,
+    "sample_image_height": 480,
+    "retried_image_exists": true
+  },
+  "stage_status": {
+    "stage0": "completed",
+    "stage1": "completed",
+    "stage2": "completed",
+    "stage3": "validated_no_checkpoint"
+  },
+  "git_modified_files": [
+    "lavis/models/base_model.py",
+    "lavis/models/blip2_models/blip2_qformer.py"
+  ],
+  "latest_stage3_log": "D:\\Purdue\\Courses\\04. Spring 2026 ECE 59500-073 LEC\\Term Paper\\logs\\blip2\\stage3\\20260328_044436_stage1_local_smoke_non_dist_and_caption_fix.log"
+}
