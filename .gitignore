@@ -7,7 +7,15 @@ __pycache__/
 .mypy_cache/
 .ipynb_checkpoints/
 *.egg-info/
+*.tmp
+*.bak
+Thumbs.db
+Desktop.ini
 
 repo_study/**/.git/
-repo_study/LAVIS/cache/coco/images/
-repo_study/LAVIS/output/
+paper/*.aux
+paper/*.bbl
+paper/*.blg
+paper/*.log
+paper/*.out
+paper/*_pdfcheck.txt

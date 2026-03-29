@@ -1,0 +1,125 @@
+NLP Term Paper / Project
+Assignment Scope & To-Do
+
+Overview
+This assignment is structured like a conference-style workflow and consists of:
+• Paper selection and bibliography submission
+• Reading and critique of papers
+• Implementation and evaluation (reproduction)
+• Final paper, peer reviews, and presentation
+
+1. Paper Selection
+Requirements
+• Select at least 3 NLP papers
+• Preferably from top venues: ACL, EMNLP, NAACL, NeurIPS, ICML, ICLR, etc.
+• Ideally published within the last 3 years
+• Must be approved by the professor
+
+Submission Format
+• Submit a single .bib file
+• Filename: your userid.bib
+• Each entry must include:
+– Title
+– Authors
+– Venue
+– Year
+– Pages
+– URL to PDF
+Note: Do NOT upload the actual PDFs.
+1
+
+2. Reading and Understanding
+• Read all three papers thoroughly
+• Ensure at least one paper is suitable for implementation
+
+3. Implementation and Evaluation
+Requirements
+• Implement at least one paper
+• Must be non-trivial
+• Guideline: approximately 4+ pages of code
+
+Expectations
+• Reproduce core ideas or methods
+• Conduct meaningful evaluation
+• Ideally replicate experiments (not required)
+
+Notes
+• Any programming language is allowed
+
+4. Final Paper
+Format
+• Must follow ACL 2026 formatting (LaTeX)
+• Submit a single PDF file
+• Filename: your userid.pdf
+• Do NOT include your name (double-blind)
+
+Structure
+• 50%: Paper Critique
+– Analysis of all three papers
+– Strengths, weaknesses, comparisons
+• 50%: Project Section
+– Implementation details
+– Experimental setup
+– Results and evaluation
+2
+
+Deadline
+April 10, 2026 (5:00 PM)
+
+5. Peer Review
+Requirements
+• Review 5 other student papers
+• Write conference-style reviews
+
+Submission Format
+• Each review as a .txt file
+• Place all in a folder named your userid
+• Zip folder as your userid.zip
+
+Deadline
+April 24, 2026 (5:00 PM)
+
+6. Presentation
+Format
+• In-class presentation
+• Tools: PowerPoint, LaTeX Beamer, etc.
+
+Content
+• Summary of three papers
+• Critique
+• Implementation and evaluation
+
+Notes
+• Presentations begin early April
+• Must be ready before final submission deadline
+
+3
+
+Checklist
+Before April 10
+• Read all 3 papers
+• Complete implementation
+• Run experiments
+• Write paper (ACL format, anonymized)
+• Submit PDF
+
+Before Presentation
+• Prepare slides
+• Practice presentation
+• Test setup
+
+Before April 24
+• Review 5 papers
+• Write reviews
+• Submit ZIP file
+
+Key Rules
+• No identifying information (double-blind review)
+• Follow exact file formats
+• Submit via Brightspace
+• Implementation must be non-trivial
+• Paper must follow ACL formatting
+
+4
+
+

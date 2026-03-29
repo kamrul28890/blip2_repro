@@ -63,12 +63,11 @@ Completion criteria:
 
 Status:
 
-- Validated locally, but not checkpoint-complete yet
+- Complete
 - Evidence:
-  - latest smoke run uses the intended reduced dataset
-  - latest smoke run loads `10000` train, `1000` val, and `1000` test records
-  - latest smoke run enters `Start training epoch 0`
-  - no checkpoint exists yet because the longest run was cut off by the external command timeout
+  - the local run produced `repo_study/LAVIS/lavis/output/blip2_repro/stage1_local/20260328142/checkpoint_0.pth`
+  - the stage-1 output log recorded `train_loss=0.326`
+  - the stage-1 checkpoint was validated by loading it with PyTorch
 - Acceptance criteria for the first runnable milestone:
   - met
 
@@ -80,7 +79,11 @@ Prerequisite:
 
 Status:
 
-- Blocked on stage-1 checkpoint
+- Complete
+- Evidence:
+  - the local run produced `repo_study/LAVIS/lavis/output/blip2_repro/stage2_local_opt350m/20260328150/checkpoint_0.pth`
+  - the stage-2 output log recorded `train_loss=0.294`
+  - the operator-reported total training time was `42m 14s`
 
 ## Stage 5: Caption Fine-Tuning
 
@@ -90,4 +93,9 @@ Prerequisite:
 
 Status:
 
-- Blocked on stage-2 checkpoint
+- Complete
+- Evidence:
+  - the local run produced `repo_study/LAVIS/lavis/output/blip2_repro/caption_local_opt350m/20260328225/checkpoint_0.pth`
+  - the caption output log recorded `train_loss=0.227`
+  - the run wrote `result/val_epoch0.json` on the reduced validation subset
+  - local Windows metric scoring was intentionally disabled for the final successful checkpoint run because METEOR remained unstable in this environment

@@ -1,0 +1,30 @@
+Paper ID:
+Reviewer:
+
+Summary:
+Briefly summarize the paper's goal, method, and main claims.
+
+Strengths:
+- 
+- 
+- 
+
+Weaknesses:
+- 
+- 
+- 
+
+Technical Quality:
+Comment on correctness, clarity of method, evaluation quality, and whether claims are supported.
+
+Reproducibility:
+Comment on code availability, dataset transparency, compute requirements, and implementation clarity.
+
+Questions For The Authors:
+1. 
+2. 
+3. 
+
+Overall Recommendation:
+
+Confidence:

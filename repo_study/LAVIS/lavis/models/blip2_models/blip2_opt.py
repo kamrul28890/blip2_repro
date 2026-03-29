@@ -92,8 +92,11 @@ class Blip2OPT(Blip2Base):
             "\n", add_special_tokens=False
         ).input_ids[0]
 
+        # Project into the OPT token-embedding space because some variants
+        # (for example OPT-350M) use a smaller embedding dimension than hidden size.
+        self.opt_embed_dim = self.opt_model.get_input_embeddings().embedding_dim
         self.opt_proj = nn.Linear(
-            self.Qformer.config.hidden_size, self.opt_model.config.hidden_size
+            self.Qformer.config.hidden_size, self.opt_embed_dim
         )
 
         self.max_txt_len = max_txt_len

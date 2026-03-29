@@ -1,0 +1,64 @@
+{
+  "ground_truth_path": "D:\\Purdue\\Courses\\04. Spring 2026 ECE 59500-073 LEC\\Term Paper\\repo_study\\LAVIS\\cache\\coco\\annotations\\coco_karpathy_val_small_gt.json",
+  "prediction_path": "D:\\Purdue\\Courses\\04. Spring 2026 ECE 59500-073 LEC\\Term Paper\\repo_study\\LAVIS\\lavis\\output\\blip2_repro\\caption_local_opt350m\\20260328225\\result\\val_epoch0.json",
+  "aligned_image_count": 1000,
+  "missing_in_predictions": 0,
+  "extra_predictions": 0,
+  "metrics": {
+    "Bleu_1": 0.33397578133546324,
+    "Bleu_2": 0.1065595428132206,
+    "Bleu_3": 0.03453019250838613,
+    "Bleu_4": 0.014517364208935334,
+    "CIDEr": 0.030293416112162366
+  },
+  "diversity": {
+    "prediction_count": 1000,
+    "unique_caption_count": 61,
+    "most_common_caption": "a woman with her hands in her pockets",
+    "most_common_caption_count": 251,
+    "top_5_caption_coverage": 661,
+    "top_10_caption_coverage": 799,
+    "top_captions": [
+      {
+        "caption": "a woman with her hands in her pockets",
+        "count": 251
+      },
+      {
+        "caption": "a woman with her arms around a man",
+        "count": 139
+      },
+      {
+        "caption": "a man with a gun in his hand",
+        "count": 129
+      },
+      {
+        "caption": "a woman with her hands on her hips",
+        "count": 107
+      },
+      {
+        "caption": "a woman with her hair pulled back",
+        "count": 35
+      },
+      {
+        "caption": "a woman with a baby in her arms",
+        "count": 33
+      },
+      {
+        "caption": "a woman holding a baby in her arms",
+        "count": 33
+      },
+      {
+        "caption": "a man and a woman holding hands",
+        "count": 28
+      },
+      {
+        "caption": "a woman with her hands up in the air",
+        "count": 26
+      },
+      {
+        "caption": "a man wearing a suit and tie",
+        "count": 18
+      }
+    ]
+  }
+}

@@ -132,9 +132,41 @@ This file tracks every environment or execution failure that materially changes 
 - Fix policy: run stage 1 as a longer background or supervised session, or move the same setup to an A100 machine if checkpoint turnaround is too slow
 - Fix type: operational next step, not a code bug
 
+### 17. BLIP-2 stage 2 with `facebook/opt-350m` failed on an embedding-dimension mismatch
+
+- Detection method: the latest `termina_output.md` stage-2 run and the corresponding stage-2 traceback
+- Symptom: `RuntimeError: Sizes of tensors must match except in dimension 1. Expected size 1024 but got size 512`
+- Root cause: `blip2_opt.py` projected Q-Former outputs to `self.opt_model.config.hidden_size`, but `facebook/opt-350m` uses token embeddings with dimension `512` (`word_embed_proj_dim`) while the hidden size is `1024`
+- Fix policy: project Q-Former outputs into `self.opt_model.get_input_embeddings().embedding_dim` so the bridge matches the actual `inputs_embeds` interface used in training and generation
+- Fix type: permanent for this workspace and a generally safer implementation for smaller OPT variants
+
+### 18. Caption fine-tuning config used an empty `valid_splits` list
+
+- Detection method: the caption-stage traceback in `termina_output.md`
+- Symptom: `AssertionError: Only support one split for evaluation.`
+- Root cause: `lavis/tasks/captioning.py` expects `run.valid_splits` to contain exactly one split name, but the local caption config set it to an empty list
+- Fix policy: set `run.valid_splits: ["val"]` in the local caption config so the captioning task can initialize correctly
+- Fix type: permanent for this workspace config
+
+### 19. Caption evaluation compared reduced-subset predictions against the full official COCO val ground truth
+
+- Detection method: the latest caption-stage traceback in `termina_output.md`
+- Symptom: `AssertionError` inside `pycocoevalcap` at `assert(gts.keys() == res.keys())`
+- Root cause: the local caption run validates on `coco_karpathy_val_small.json` with `1000` images, but LAVIS's default COCO caption evaluation downloads the full `coco_karpathy_val_gt.json`, so the ground-truth and prediction image-id sets do not match
+- Fix policy: generate a COCO-format ground-truth file from the reduced `coco_karpathy_val_small.json` subset and point `run.annotation_file` to it in the local caption config
+- Fix type: permanent for this workspace's reduced-subset caption evaluation path
+
+### 20. Caption metric scoring still failed on Windows inside METEOR after the subset ground-truth mismatch was fixed
+
+- Detection method: the newest `termina_output.md` caption run after the subset-matched ground truth was added
+- Symptom: metric scoring progressed through BLEU and then failed at METEOR with `OSError: [Errno 22] Invalid argument`
+- Root cause: the Windows-local `pycocoevalcap` METEOR subprocess path is unstable in this environment even after the subset image-id mismatch is fixed
+- Fix policy: set `run.report_metric: false` in the local caption config so the caption fine-tuning run can finish and save its checkpoint without entering the unstable Java/METEOR scoring path
+- Fix type: practical workspace fix for local Windows training runs; quantitative caption metrics should be computed later with a more stable evaluation path if needed
+
 ## Current Outcome
 
 - Environment installation is complete
 - Dataset staging is complete
-- Stage-1 smoke launches correctly on the local machine after the listed fixes
-- Remaining work is now about letting stage 1 run long enough to emit a checkpoint
+- Stage 1 completed epoch `0` locally and produced a valid checkpoint
+- Stage 2 now has a concrete code-level fix for the OPT-350M bridge mismatch and is ready for a rerun

@@ -19,6 +19,7 @@ from lavis.common.dist_utils import (
     download_cached_file,
     get_rank,
     get_world_size,
+    is_dist_avail_and_initialized,
     is_main_process,
     main_process,
 )
@@ -419,7 +420,8 @@ class RunnerBase:
             if self.save_freq>0 and cur_epoch%self.save_freq == 0:
                 self._save_checkpoint(cur_epoch, is_best=False)
 
-            dist.barrier()
+            if is_dist_avail_and_initialized():
+                dist.barrier()
 
         # save last checkpoint
         if self.save_last and not self.evaluate_only:

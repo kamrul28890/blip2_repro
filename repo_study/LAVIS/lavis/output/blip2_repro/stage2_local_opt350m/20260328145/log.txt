@@ -1,0 +1,226 @@
+{
+    "run": {
+        "task": "image_text_pretrain",
+        "lr_sched": "linear_warmup_cosine_lr",
+        "init_lr": 0.0001,
+        "min_lr": 1e-05,
+        "warmup_lr": 1e-06,
+        "warmup_steps": 50,
+        "weight_decay": 0.05,
+        "max_epoch": 1,
+        "batch_size_train": 1,
+        "batch_size_eval": 1,
+        "accum_grad_iters": 16,
+        "num_workers": 2,
+        "seed": 42,
+        "output_dir": "output/blip2_repro/stage2_local_opt350m",
+        "amp": true,
+        "resume_ckpt_path": null,
+        "evaluate": false,
+        "train_splits": [
+            "train"
+        ],
+        "valid_splits": [],
+        "test_splits": [],
+        "device": "cuda",
+        "world_size": 1,
+        "dist_url": "env://",
+        "distributed": false
+    },
+    "model": {
+        "arch": "blip2_opt",
+        "load_finetuned": false,
+        "pretrained": "D:/Purdue/Courses/04. Spring 2026 ECE 59500-073 LEC/Term Paper/repo_study/LAVIS/lavis/output/blip2_repro/stage1_local/20260328142/checkpoint_0.pth",
+        "finetuned": "",
+        "image_size": 224,
+        "drop_path_rate": 0,
+        "use_grad_checkpoint": false,
+        "vit_precision": "fp16",
+        "freeze_vit": true,
+        "num_query_token": 32,
+        "opt_model": "facebook/opt-350m",
+        "prompt": "",
+        "model_type": "pretrain_opt2.7b",
+        "load_pretrained": true,
+        "vit_model": "clip_L"
+    },
+    "preprocess": {
+        "vis_processor": {
+            "train": {
+                "name": "blip_image_train",
+                "image_size": 224
+            },
+            "eval": {
+                "name": "blip_image_eval",
+                "image_size": 224
+            }
+        },
+        "text_processor": {
+            "train": {
+                "name": "blip_caption"
+            },
+            "eval": {
+                "name": "blip_caption"
+            }
+        }
+    },
+    "datasets": {
+        "coco_caption": {
+            "dataset_card": "dataset_card/coco_caption.md",
+            "data_type": "images",
+            "build_info": {
+                "annotations": {
+                    "train": {
+                        "url": "D:/Purdue/Courses/04. Spring 2026 ECE 59500-073 LEC/Term Paper/repo_study/LAVIS/cache/coco/annotations/coco_karpathy_train_small.json",
+                        "md5": "aa31ac474cf6250ebb81d18348a07ed8",
+                        "storage": "D:/Purdue/Courses/04. Spring 2026 ECE 59500-073 LEC/Term Paper/repo_study/LAVIS/cache/coco/annotations/coco_karpathy_train_small.json"
+                    },
+                    "val": {
+                        "url": "D:/Purdue/Courses/04. Spring 2026 ECE 59500-073 LEC/Term Paper/repo_study/LAVIS/cache/coco/annotations/coco_karpathy_val_small.json",
+                        "md5": "b273847456ef5580e33713b1f7de52a0",
+                        "storage": "D:/Purdue/Courses/04. Spring 2026 ECE 59500-073 LEC/Term Paper/repo_study/LAVIS/cache/coco/annotations/coco_karpathy_val_small.json"
+                    },
+                    "test": {
+                        "url": "D:/Purdue/Courses/04. Spring 2026 ECE 59500-073 LEC/Term Paper/repo_study/LAVIS/cache/coco/annotations/coco_karpathy_test_small.json",
+                        "md5": "3ff34b0ef2db02d01c37399f6a2a6cd1",
+                        "storage": "D:/Purdue/Courses/04. Spring 2026 ECE 59500-073 LEC/Term Paper/repo_study/LAVIS/cache/coco/annotations/coco_karpathy_test_small.json"
+                    }
+                },
+                "images": {
+                    "storage": "D:/Purdue/Courses/04. Spring 2026 ECE 59500-073 LEC/Term Paper/repo_study/LAVIS/cache/coco/images"
+                }
+            },
+            "vis_processor": {
+                "train": {
+                    "name": "blip2_image_train",
+                    "image_size": 224
+                },
+                "eval": {
+                    "name": "blip_image_eval",
+                    "image_size": 224
+                }
+            },
+            "text_processor": {
+                "train": {
+                    "name": "blip_caption"
+                },
+                "eval": {
+                    "name": "blip_caption"
+                }
+            }
+        }
+    }
+}
+{
+    "run": {
+        "task": "image_text_pretrain",
+        "lr_sched": "linear_warmup_cosine_lr",
+        "init_lr": 0.0001,
+        "min_lr": 1e-05,
+        "warmup_lr": 1e-06,
+        "warmup_steps": 50,
+        "weight_decay": 0.05,
+        "max_epoch": 1,
+        "batch_size_train": 1,
+        "batch_size_eval": 1,
+        "accum_grad_iters": 16,
+        "num_workers": 2,
+        "seed": 42,
+        "output_dir": "output/blip2_repro/stage2_local_opt350m",
+        "amp": true,
+        "resume_ckpt_path": null,
+        "evaluate": false,
+        "train_splits": [
+            "train"
+        ],
+        "valid_splits": [],
+        "test_splits": [],
+        "device": "cuda",
+        "world_size": 1,
+        "dist_url": "env://",
+        "distributed": false
+    },
+    "model": {
+        "arch": "blip2_opt",
+        "load_finetuned": false,
+        "pretrained": "D:/Purdue/Courses/04. Spring 2026 ECE 59500-073 LEC/Term Paper/repo_study/LAVIS/lavis/output/blip2_repro/stage1_local/20260328142/checkpoint_0.pth",
+        "finetuned": "",
+        "image_size": 224,
+        "drop_path_rate": 0,
+        "use_grad_checkpoint": false,
+        "vit_precision": "fp16",
+        "freeze_vit": true,
+        "num_query_token": 32,
+        "opt_model": "facebook/opt-350m",
+        "prompt": "",
+        "model_type": "pretrain_opt2.7b",
+        "load_pretrained": true,
+        "vit_model": "clip_L"
+    },
+    "preprocess": {
+        "vis_processor": {
+            "train": {
+                "name": "blip_image_train",
+                "image_size": 224
+            },
+            "eval": {
+                "name": "blip_image_eval",
+                "image_size": 224
+            }
+        },
+        "text_processor": {
+            "train": {
+                "name": "blip_caption"
+            },
+            "eval": {
+                "name": "blip_caption"
+            }
+        }
+    },
+    "datasets": {
+        "coco_caption": {
+            "dataset_card": "dataset_card/coco_caption.md",
+            "data_type": "images",
+            "build_info": {
+                "annotations": {
+                    "train": {
+                        "url": "D:/Purdue/Courses/04. Spring 2026 ECE 59500-073 LEC/Term Paper/repo_study/LAVIS/cache/coco/annotations/coco_karpathy_train_small.json",
+                        "md5": "aa31ac474cf6250ebb81d18348a07ed8",
+                        "storage": "D:/Purdue/Courses/04. Spring 2026 ECE 59500-073 LEC/Term Paper/repo_study/LAVIS/cache/coco/annotations/coco_karpathy_train_small.json"
+                    },
+                    "val": {
+                        "url": "D:/Purdue/Courses/04. Spring 2026 ECE 59500-073 LEC/Term Paper/repo_study/LAVIS/cache/coco/annotations/coco_karpathy_val_small.json",
+                        "md5": "b273847456ef5580e33713b1f7de52a0",
+                        "storage": "D:/Purdue/Courses/04. Spring 2026 ECE 59500-073 LEC/Term Paper/repo_study/LAVIS/cache/coco/annotations/coco_karpathy_val_small.json"
+                    },
+                    "test": {
+                        "url": "D:/Purdue/Courses/04. Spring 2026 ECE 59500-073 LEC/Term Paper/repo_study/LAVIS/cache/coco/annotations/coco_karpathy_test_small.json",
+                        "md5": "3ff34b0ef2db02d01c37399f6a2a6cd1",
+                        "storage": "D:/Purdue/Courses/04. Spring 2026 ECE 59500-073 LEC/Term Paper/repo_study/LAVIS/cache/coco/annotations/coco_karpathy_test_small.json"
+                    }
+                },
+                "images": {
+                    "storage": "D:/Purdue/Courses/04. Spring 2026 ECE 59500-073 LEC/Term Paper/repo_study/LAVIS/cache/coco/images"
+                }
+            },
+            "vis_processor": {
+                "train": {
+                    "name": "blip2_image_train",
+                    "image_size": 224
+                },
+                "eval": {
+                    "name": "blip_image_eval",
+                    "image_size": 224
+                }
+            },
+            "text_processor": {
+                "train": {
+                    "name": "blip_caption"
+                },
+                "eval": {
+                    "name": "blip_caption"
+                }
+            }
+        }
+    }
+}

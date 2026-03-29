@@ -58,13 +58,15 @@ run:
   max_len: 30
   min_len: 8
   num_beams: 3
+  annotation_file: "D:/Purdue/Courses/04. Spring 2026 ECE 59500-073 LEC/Term Paper/repo_study/LAVIS/cache/coco/annotations/coco_karpathy_val_small_gt.json"
+  report_metric: false
   seed: 42
   output_dir: "output/blip2_repro/caption_local_opt350m"
   amp: true
   resume_ckpt_path: null
   evaluate: false
   train_splits: ["train"]
-  valid_splits: []
+  valid_splits: ["val"]
   test_splits: []
   device: "cuda"
   world_size: 1

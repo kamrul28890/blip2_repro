@@ -2,45 +2,34 @@
 
 ## Immediate
 
-1. Run a longer logged stage-1 local session so epoch `0` can finish and emit a checkpoint.
-2. Monitor the newest stage-3 log while that run is active.
-3. If the 3070 run does not produce a checkpoint in a reasonable window, move the exact current repo state to an A100 machine before changing configs again.
+1. Publish the repo with Git LFS so the staged COCO images and final checkpoints travel with the documentation.
+2. Keep `paper/term_paper.pdf` as the canonical anonymous report and rename it to your userid-based filename only at submission time.
+3. Use `paper/SUBMISSION_NOTES.md` as the handoff index for the paper, metrics, presentation outline, and review template.
 
-Recommended command:
-
-```powershell
-$python = (Resolve-Path '.\.venv\Scripts\python.exe').Path
-$config = (Resolve-Path '.\blip2_repro\configs\stage1_local.yaml').Path
-.\scripts\run_logged_step.ps1 `
-  -Stage stage3 `
-  -Step stage1_local_long_run `
-  -WorkingDirectory .\repo_study\LAVIS `
-  -Command ('"{0}" train.py --cfg-path "{1}"' -f $python, $config)
-```
-
-To watch the latest log:
+Key publishable artifacts:
 
 ```powershell
-$latest = Get-ChildItem .\logs\blip2\stage3 -File | Sort-Object LastWriteTime -Descending | Select-Object -First 1
-Get-Content $latest.FullName -Wait
+D:\Purdue\Courses\04. Spring 2026 ECE 59500-073 LEC\Term Paper\paper\term_paper.pdf
+D:\Purdue\Courses\04. Spring 2026 ECE 59500-073 LEC\Term Paper\metrics\blip2\caption_eval_summary.json
+D:\Purdue\Courses\04. Spring 2026 ECE 59500-073 LEC\Term Paper\metrics\blip2\caption_eval_examples.json
+D:\Purdue\Courses\04. Spring 2026 ECE 59500-073 LEC\Term Paper\repo_study\LAVIS\lavis\output\blip2_repro\caption_local_opt350m\20260328225\checkpoint_0.pth
 ```
 
-## After Stage-1 Checkpoint Exists
+## Best Improvement Path On The Same Machine
 
-1. Register the checkpoint path in `metrics/blip2/checkpoint_registry.jsonl`.
-2. Launch stage 2 with the same workspace venv.
+1. Re-run the pipeline with the stronger configs:
+   - `blip2_repro/configs/stage1_better_local.yaml`
+   - `blip2_repro/configs/stage2_better_local_opt350m.yaml`
+   - `blip2_repro/configs/caption_better_local_opt350m.yaml`
+2. Recompute metrics with `blip2_repro/scripts/run_caption_eval.ps1`.
+3. Compare the new `metrics/blip2/caption_eval_summary.json` against the baseline.
 
-Recommended command:
+## If You Switch To Better Compute
 
-```powershell
-.\blip2_repro\scripts\run_stage2_local.ps1 -Stage1Checkpoint "<absolute-path-to-stage1-checkpoint>"
-```
-
-## If You Switch To A100
-
-1. Reuse the current workspace, configs, and LAVIS patches first.
-2. Re-run the same stage-1 logged command before making new dependency or config changes.
-3. Only reduce local constraints like batch size after you see the A100 behavior.
+1. Reuse the same repo, scripts, docs, and patches first.
+2. Increase dataset size before changing the model family.
+3. Scale `max_epoch`, `batch_size_train`, `accum_grad_iters`, and `image_size` through config changes rather than rewriting the workflow.
+4. Use `docs/blip2/improvement_playbook.md` as the scaling guide.
 
 ## Fallback Policy
 

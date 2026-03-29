@@ -1,0 +1,205 @@
+\documentclass[11pt]{article}
+\usepackage[review]{acl}
+\usepackage{times}
+\usepackage{latexsym}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{microtype}
+\usepackage{inconsolata}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{graphicx}
+
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+
+\title{Critique of Recent Vision-Language Papers and a Local Reproduction of BLIP-2}
+\author{Anonymous}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+This report follows the term-paper workflow of reading, critiquing, implementing, and evaluating recent NLP and multimodal papers. I study three candidate papers: BLIP-2, LLaVA, and VisionLLM v2. The critique focuses on their architectural ideas, training data, compute requirements, openness, and reproducibility under student-level hardware constraints. Based on that analysis, I select BLIP-2 as the implementation target because its modular design gives the best chance of reproducing the core method under limited compute. I then build a full local BLIP-2 pipeline on a single NVIDIA RTX 3070 8GB GPU using the official LAVIS codebase, reduced COCO Karpathy splits, CLIP-L, and OPT-350M. The reproduction successfully completes all three major stages: stage-1 representation learning, stage-2 generative alignment, and caption fine-tuning, and produces valid checkpoints for each stage. However, the final captioning quality is far below the paper's full-scale COCO result. On a reduced 1,000-image validation subset, the final successful local checkpoint reaches BLEU-4 of 1.45 and CIDEr of 3.03 when reported on the same paper-style scale as BLIP-2's COCO table, compared with BLIP-2 ViT-g OPT2.7B's reported BLEU-4 of 43.7 and CIDEr of 145.8 on the Karpathy COCO test split. I argue that the reproduction is successful at the pipeline level but not at the performance-parity level, and I analyze the main reasons for that gap.
+\end{abstract}
+
+\section{Introduction}
+The assignment requires two equally important parts: a critique of at least three papers and a non-trivial implementation with evaluation. I therefore treat this report as both a comparative review and a reproduction study. The three papers I selected are BLIP-2 \citep{li2023blip2}, LLaVA \citep{liu2023visual}, and VisionLLM v2 \citep{wu2024visionllmv2}. All three are strong multimodal systems, but they differ sharply in how they bridge vision and language, how much supervision they require, and how practical they are to reproduce.
+
+My final implementation target is BLIP-2. The reason is not that it is the easiest paper in an absolute sense. Rather, it is the one whose core idea still survives aggressive downscaling: freeze a strong image encoder and language model, and only train the bridge. This makes it much more realistic than VisionLLM v2, whose unified multi-decoder design depends on a very large engineering and compute budget, and safer than reproducing LLaVA under a single 8GB GPU.
+
+\section{Paper Critique}
+\subsection{BLIP-2}
+BLIP-2's main contribution is the Querying Transformer (Q-Former), which serves as a lightweight bottleneck between a frozen image encoder and a frozen large language model \citep{li2023blip2}. The paper's strongest idea is its two-stage training strategy. First, it learns language-relevant visual representations from a frozen image encoder. Second, it aligns those learned visual queries to a frozen language model for generation. This decomposition is elegant because it turns a difficult end-to-end multimodal optimization problem into a modular bridge-learning problem.
+
+The strengths of BLIP-2 are clear. It is compute-aware relative to prior frontier systems, it is open-source through LAVIS, and it performs well across zero-shot VQA, captioning, and retrieval. It is also conceptually clean: the model architecture directly reflects the hypothesis that a small trainable bridge can leverage powerful frozen unimodal backbones.
+
+Its main weakness is that ``compute-efficient'' is still relative. The paper still uses 129M pre-training images, 250k first-stage steps, and 80k second-stage steps. The appendix states that even the largest model still needs a 16-A100 machine for less than six days in stage 1 and less than three days in stage 2 \citep{li2023blip2}. So BLIP-2 is much more realistic than some alternatives, but it is still far from trivial to reproduce faithfully.
+
+\subsection{LLaVA}
+LLaVA's key idea is visual instruction tuning: connect a vision encoder to a Vicuna-like LLM and then tune the model on GPT-generated multimodal instruction data \citep{liu2023visual}. Conceptually, it is attractive because it directly targets assistant-like behavior rather than only representation learning. The paper is influential because it helped shift multimodal work toward instruction-following interfaces and open-source chat-style systems.
+
+LLaVA's strengths are simplicity and task relevance. It is easier to explain than a multi-stage multimodal pre-training framework, and its outputs align well with what users expect from a general visual assistant. It is also comparatively open and reproducible. The appendix reports training on 8 A100 GPUs, with pretraining completing in about 4 hours and instruction tuning in about 10 hours \citep{liu2023visual}. That is still a serious budget, but much smaller than very large proprietary systems.
+
+Its main weakness is that its strongest behavior depends heavily on synthetic GPT-generated data and instruction tuning quality. In other words, it is powerful as an assistant, but its gains are tied to the data pipeline and alignment setup as much as to the underlying architectural novelty. For a class project on limited hardware, it is reproducible only if moderate multi-GPU compute is available.
+
+\subsection{VisionLLM v2}
+VisionLLM v2 aims at a much more ambitious goal: a single end-to-end generalist multimodal model that supports hundreds of vision and vision-language tasks, including perception, understanding, generation, and editing \citep{wu2024visionllmv2}. Its ``super link'' mechanism routes task-specific information from the central MLLM to specialized decoders such as Grounding DINO, UniPose, and diffusion-based image generators.
+
+The paper's strength is scope. It is not merely a VQA or captioning model; it tries to unify diverse output types inside one system. The model is also thoughtful about task conflicts and multi-stage training, which are real problems in generalist multimodal systems.
+
+The weakness is reproducibility. The appendix reports a three-stage regime using 64 A100 GPUs for stage 1 and 128 A100 GPUs for stages 2 and 3, with approximately 5, 3, and 10 days of training respectively \citep{wu2024visionllmv2}. That scale, combined with many decoders, curated datasets, and dependency-heavy tooling, makes it unrealistic for this assignment unless one already has institutional cluster access and substantial engineering time.
+
+\subsection{Comparison and Paper Choice}
+Table~\ref{tab:critique} summarizes the main comparison. The most important conclusion is that BLIP-2 offers the best balance between novelty, non-triviality, openness, and downscalable reproducibility.
+
+\begin{table*}[t]
+\centering
+\small
+\begin{tabularx}{\textwidth}{p{2.2cm} Y Y Y Y}
+\toprule
+Paper & Core idea & Main strengths & Main weaknesses & Reproducibility judgment \\
+\midrule
+BLIP-2 & Two-stage Q-Former bridge between frozen image encoder and frozen LLM & Clean modular design, strong results, open-source LAVIS implementation, best downscaling story & Still depends on huge pre-training scale; paper setting is far beyond student hardware & Best choice for a scaled reproduction of the core method \\
+LLaVA & Visual instruction tuning of a vision encoder plus Vicuna-style LLM on GPT-generated multimodal instructions & Simple architecture, strong assistant behavior, strong community adoption, moderate openness & Performance depends heavily on instruction data pipeline; still needs multi-GPU training for faithful reproduction & Good second choice with 8x A100-level access \\
+VisionLLM v2 & End-to-end generalist MLLM with routing tokens, super-link queries, and multiple task-specific decoders & Broadest task coverage, strong generalist ambition, perception plus generation in one framework & Extremely high engineering and compute burden; many decoders and datasets; hard to ablate cleanly & Not realistic for this assignment on local hardware \\
+\bottomrule
+\end{tabularx}
+\caption{Comparative critique of the three selected papers.}
+\label{tab:critique}
+\end{table*}
+
+\section{Project Section}
+\subsection{Objective and Scope}
+The goal of the implementation was not to exactly match the paper's full training regime. That would have been impossible on the available hardware. Instead, the goal was to reproduce the \emph{core BLIP-2 pipeline} from scratch in a scaled local setting:
+\begin{itemize}
+\item stage-1 vision-language representation learning,
+\item stage-2 vision-to-language generative alignment with OPT,
+\item caption fine-tuning on COCO-style data.
+\end{itemize}
+
+The local implementation uses the official LAVIS BLIP-2 code path, but with carefully chosen reductions and fixes so that the full pipeline can run on a single RTX 3070 8GB GPU.
+
+\subsection{Experimental Setup}
+The final setup is intentionally much smaller than the paper's. I use the workspace virtual environment, the official LAVIS implementation, and reduced COCO Karpathy splits of 10,000 train, 1,000 validation, and 1,000 test samples. The local model uses CLIP-L as the vision encoder, OPT-350M as the language model, image resolution 224, batch size 1, gradient accumulation 16, and one epoch for each stage. The successful caption fine-tuning run uses a subset-matched validation annotation file and disables unstable Windows METEOR scoring during checkpoint generation.
+
+Table~\ref{tab:setup-compare} shows why the local run should be interpreted as a scaled reproduction rather than a full replication.
+
+\begin{table*}[t]
+\centering
+\small
+\begin{tabularx}{\textwidth}{p{3.3cm} Y Y}
+\toprule
+Dimension & BLIP-2 paper configuration & Local reproduction \\
+\midrule
+Pre-training data & 129M image-text pairs from COCO, VG, CC3M, CC12M, SBU, and LAION subsets \citep{li2023blip2} & Reduced COCO Karpathy subset only (10k train / 1k val / 1k test) \\
+Bridge training schedule & 250k steps stage 1, 80k steps stage 2 \citep{li2023blip2} & 1 epoch per stage \\
+Caption fine-tuning schedule & 5 epochs, batch size 256, image resolution 364 \citep{li2023blip2} & 1 epoch, batch size 1 with grad accumulation 16, image resolution 224 \\
+Vision encoder & ViT-g/14 in the reported OPT2.7B captioning result \citep{li2023blip2} & CLIP ViT-L \\
+Language model & OPT-2.7B for the best reported OPT caption result \citep{li2023blip2} & OPT-350M \\
+Compute & Largest model pre-training on a 16-A100(40G) machine, $<$6 days first stage and $<$3 days second stage \citep{li2023blip2} & One RTX 3070 8GB; full local three-stage wall-clock about 1h 28m 53s \\
+\bottomrule
+\end{tabularx}
+\caption{Original paper configuration versus the local reproduction.}
+\label{tab:setup-compare}
+\end{table*}
+
+The local compute budget was measured from output directory creation and final-write timestamps:
+\begin{itemize}
+\item Stage 1: 18m 31s
+\item Stage 2: 42m 48s
+\item Caption fine-tuning: 27m 34s
+\item Total local pipeline: 1h 28m 53s
+\end{itemize}
+
+\subsection{Implementation Details}
+Although the local run is small, the implementation was non-trivial. Beyond setting up data and configs, I had to patch several parts of the official code path so that BLIP-2 could train end-to-end in a single-process Windows environment.
+
+The most important fixes were:
+\begin{itemize}
+\item overriding LAVIS cache-path assumptions so the reduced local COCO cache was actually used,
+\item adding non-distributed guards for collective operations and barriers in single-GPU runs,
+\item fixing a caption-dataset \texttt{image\_id} path that incorrectly assumed retrieval-style tensors,
+\item patching the OPT bridge so that OPT-350M projects into the actual token-embedding dimension rather than the hidden size,
+\item generating a reduced COCO validation ground-truth file so evaluation used the same image subset as the predictions,
+\item disabling local Windows METEOR scoring in the final checkpoint-producing caption run because the Java subprocess remained unstable.
+\end{itemize}
+
+This engineering work matters for the assignment because it demonstrates that the project section is not only a hyperparameter change. It required reasoning across data loading, model internals, distributed assumptions, and evaluation tooling.
+
+\subsection{Results and Evaluation}
+\paragraph{Training outcomes.}
+The full local pipeline completed successfully and produced valid checkpoints for all three stages. The stage-wise training losses were:
+\begin{itemize}
+\item Stage 1: train loss 0.326, with ITC 0.343, ITM 0.360, and LM 4.518
+\item Stage 2: train loss 0.294
+\item Caption fine-tuning: train loss 0.227
+\end{itemize}
+
+\paragraph{Captioning metrics.}
+For the final caption result file, I ran a reduced evaluation path on the 1,000-image validation subset that computes BLEU and CIDEr while avoiding the unstable METEOR path on Windows. Because \texttt{report\_metric=false} was required during the successful checkpoint-producing run, the BLEU/CIDEr results were computed afterward from the saved \texttt{val\_epoch0.json} file using the official \texttt{pycocoevalcap} BLEU and CIDEr implementations with a subset-matched ground-truth file. I report BLEU and CIDEr on the same paper-style $\times 100$ scale used in the BLIP-2 captioning table. The full local metric vector is BLEU-1 33.40, BLEU-2 10.66, BLEU-3 3.45, BLEU-4 1.45, and CIDEr 3.03. Table~\ref{tab:metrics} compares the directly comparable local metrics against the paper's reported COCO captioning result for BLIP-2 ViT-g OPT2.7B.
+
+\begin{table}[t]
+\centering
+\small
+\begin{tabular}{lrr}
+\toprule
+Metric & Paper & Local \\
+\midrule
+BLEU-4 & 43.7 & 1.45 \\
+CIDEr & 145.8 & 3.03 \\
+\bottomrule
+\end{tabular}
+\caption{Captioning comparison between the BLIP-2 paper's COCO fine-tuned ViT-g OPT2.7B result and the local reduced-subset reproduction. The numbers are not directly comparable because the local run uses a smaller model, a smaller dataset, fewer epochs, lower image resolution, and a different evaluation split.}
+\label{tab:metrics}
+\end{table}
+
+The gap is extremely large, but it is not surprising. The local system is weaker in every major dimension: the image encoder, the language model, the amount of stage-1/2 training, the amount of caption fine-tuning, the image resolution, and the data scale.
+
+\paragraph{Qualitative behavior.}
+The final caption file also reveals a strong mode-collapse failure. Out of 1,000 predictions, there are only 61 unique captions. The most common caption appears 251 times, the top 5 captions account for 661 outputs, and the top 10 account for 799 outputs. This means the model is not only low-scoring; it is also highly degenerate as a generator.
+
+Table~\ref{tab:qualitative} shows representative examples. The generated captions are often generic person-centric templates that ignore the actual image content.
+
+\begin{table*}[t]
+\centering
+\small
+\begin{tabularx}{\textwidth}{p{1.7cm} Y Y}
+\toprule
+Image ID & Reference content (paraphrased from COCO references) & Generated caption \\
+\midrule
+91500 & Two teenagers sit on folding chairs and play video games. & a woman with her hands in her pockets \\
+511622 & A woman wearing a scarf cooks food in a pan or wok. & a woman with her hands on her hips \\
+341113 & A woman in a wetsuit rides a surfboard on a wave. & a man with a gun in his hand \\
+407403 & A painting shows yellow tulips in a white vase. & a woman holding a baby in her arms \\
+353027 & A hand lifts a slice of mushroom pizza from the pie. & a woman with a baby in her arms \\
+31240 & A train is leaving or standing at a station. & a woman with her dog in her lap \\
+\bottomrule
+\end{tabularx}
+\caption{Representative qualitative failures from the reduced validation subset.}
+\label{tab:qualitative}
+\end{table*}
+
+\subsection{Failure Analysis}
+The reproduction outcome is best described as \emph{pipeline success but model-quality failure}. I successfully reproduced the main BLIP-2 stages, obtained all checkpoints, and generated captions from the final fine-tuned model. However, the final model is far below the paper's quality. The main reasons are:
+
+\begin{itemize}
+\item \textbf{Massive scale mismatch.} The paper uses 129M pre-training images and much larger backbones; the local run uses only 10k training captions and OPT-350M.
+\item \textbf{Insufficient fine-tuning.} The paper fine-tunes for 5 epochs at higher resolution. The local run performs only one epoch at 224 pixels.
+\item \textbf{Backbone mismatch.} The paper's best OPT caption result uses ViT-g and OPT-2.7B. The local run uses CLIP-L and OPT-350M.
+\item \textbf{Evaluation mismatch.} The paper reports Karpathy COCO test results with standard caption metrics. The local run uses a reduced validation subset and a partially simplified scorer path.
+\item \textbf{Environment friction.} Windows-specific issues in the COCO evaluation pipeline forced practical compromises during the final checkpoint run.
+\end{itemize}
+
+That said, the reproduction is still meaningful. It validates the engineering path, demonstrates how BLIP-2 can be downscaled into a student-sized experiment, and produces enough evidence to evaluate the architecture's behavior under tight compute.
+
+\section{Conclusion}
+Among the three selected papers, BLIP-2 was the best implementation target because it is modular, open, and still intellectually coherent after aggressive downscaling. LLaVA is a strong alternative when moderate cluster compute is available, while VisionLLM v2 is too heavy for this assignment without major institutional infrastructure.
+
+The local BLIP-2 reproduction successfully completed stage-1 representation learning, stage-2 generative alignment, and caption fine-tuning on a single RTX 3070 8GB GPU. This satisfies the implementation requirement as a non-trivial reproduction of the core method. However, the final model does not approach the paper's reported captioning quality. The quantitative and qualitative evidence instead shows heavy degeneration and mode collapse.
+
+Therefore, the main conclusion of this project is twofold. First, BLIP-2's \emph{pipeline} is reproducible at small scale. Second, BLIP-2's \emph{performance} depends strongly on the scale of the frozen backbones, pre-training data, fine-tuning budget, and evaluation environment. That contrast is itself a useful research lesson, and it helps explain why paper-level multimodal performance remains difficult to reproduce faithfully on commodity hardware.
+
+\bibliography{term_paper}
+
+\end{document}
