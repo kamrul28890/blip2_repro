@@ -164,9 +164,19 @@ This file tracks every environment or execution failure that materially changes 
 - Fix policy: set `run.report_metric: false` in the local caption config so the caption fine-tuning run can finish and save its checkpoint without entering the unstable Java/METEOR scoring path
 - Fix type: practical workspace fix for local Windows training runs; quantitative caption metrics should be computed later with a more stable evaluation path if needed
 
+### 21. A Windows application-control policy intermittently blocked `spacy`/`thinc` DLL loading during `import lavis`
+
+- Detection method: the April 1, 2026 office caption polish launch failed before training with `ImportError: DLL load failed while importing cblas: An Application Control policy has blocked this file`
+- Symptom: `train.py` crashed during module import even though the caption training path does not use the `Img2PromptVQA` model
+- Root cause: `lavis/models/img2prompt_models/img2prompt_vqa.py` imported `spacy` at module import time, and `lavis.models.__init__` imported that module unconditionally; Windows policy sometimes blocked the `thinc` native dependency that `spacy` pulls in
+- Fix policy: make the `spacy` import lazy/optional inside `img2prompt_vqa.py` so only the `Img2PromptVQA` code path requires it
+- Fix type: permanent workspace patch that avoids unrelated BLIP-2 training runs failing on optional `spacy` dependencies
+
 ## Current Outcome
 
 - Environment installation is complete
 - Dataset staging is complete
-- Stage 1 completed epoch `0` locally and produced a valid checkpoint
-- Stage 2 now has a concrete code-level fix for the OPT-350M bridge mismatch and is ready for a rerun
+- Stage 1 completed locally and produced both reduced-split and office-split checkpoints
+- Stage 2 completed locally and produced both reduced-split and office-split checkpoints
+- Office caption fine-tuning now has a clean completed run with checkpoints saved through epoch `4`
+- The current best office validation result remains the epoch-3 caption snapshot with `Bleu_4=0.1113` and `CIDEr=0.3757`

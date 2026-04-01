@@ -35,7 +35,7 @@
 - Vision encoder: CLIP ViT-L
 - Language model: OPT-350M
 - Data: reduced COCO Karpathy split, `10k/1k/1k`
-- Training: 1 epoch each for stage 1, stage 2, and caption fine-tuning
+- Training: 3 epochs for stage 1, 3 epochs for stage 2, and 5 epochs for caption fine-tuning on the office 50k split
 
 ## Slide 7: Engineering Work
 
@@ -47,17 +47,17 @@
 
 ## Slide 8: Quantitative Results
 
-- Stage 1 train loss: `0.326`
-- Stage 2 train loss: `0.294`
-- Caption fine-tuning train loss: `0.227`
-- Local BLEU-4: `1.45` vs paper `43.7`
-- Local CIDEr: `3.03` vs paper `145.8`
+- Stage 1 office train loss: `0.412`
+- Stage 2 office train loss: `0.767`
+- Best caption fine-tuning train loss: `0.367`
+- Local BLEU-4: `11.13` vs paper `43.7`
+- Local CIDEr: `37.57` vs paper `145.8`
 
 ## Slide 9: Qualitative Results
 
-- Only `61` unique captions across `1000` predictions
-- Most common caption appears `251` times
-- Show 3 to 5 failure examples from `metrics/blip2/caption_eval_examples.json`
+- `563` unique captions across `1000` predictions
+- Most common caption appears `27` times
+- Show 3 to 5 failure examples from `metrics/blip2/caption_eval_examples_office_epoch3.json`
 
 ## Slide 10: Conclusion
 

@@ -1,0 +1,64 @@
+{
+  "ground_truth_path": "D:\\Projects\\blip2_repro\\blip2_repro-1\\repo_study\\LAVIS\\cache\\coco\\annotations\\coco_karpathy_val_office_1k_gt.json",
+  "prediction_path": "D:\\Projects\\blip2_repro\\blip2_repro-1\\repo_study\\LAVIS\\lavis\\output\\blip2_repro\\caption_office_50k_opt350m\\20260331152\\result\\val_epoch2.json",
+  "aligned_image_count": 1000,
+  "missing_in_predictions": 0,
+  "extra_predictions": 0,
+  "metrics": {
+    "Bleu_1": 0.5084164040127855,
+    "Bleu_2": 0.30604263118773023,
+    "Bleu_3": 0.17298140551096627,
+    "Bleu_4": 0.09691370762033245,
+    "CIDEr": 0.2949160053840535
+  },
+  "diversity": {
+    "prediction_count": 1000,
+    "unique_caption_count": 488,
+    "most_common_caption": "a woman holding a baby in her arms",
+    "most_common_caption_count": 36,
+    "top_5_caption_coverage": 140,
+    "top_10_caption_coverage": 214,
+    "top_captions": [
+      {
+        "caption": "a woman holding a baby in her arms",
+        "count": 36
+      },
+      {
+        "caption": "a car is parked on the street",
+        "count": 31
+      },
+      {
+        "caption": "a dog is sitting on a chair",
+        "count": 31
+      },
+      {
+        "caption": "a bathroom with a sink and toilet",
+        "count": 22
+      },
+      {
+        "caption": "a man is walking down the street",
+        "count": 20
+      },
+      {
+        "caption": "a computer with a keyboard and mouse",
+        "count": 17
+      },
+      {
+        "caption": "a piece of bread is on a plate",
+        "count": 17
+      },
+      {
+        "caption": "a tennis player playing a tennis game",
+        "count": 15
+      },
+      {
+        "caption": "two people are sitting on a table",
+        "count": 14
+      },
+      {
+        "caption": "a man riding a bike on a beach",
+        "count": 11
+      }
+    ]
+  }
+}

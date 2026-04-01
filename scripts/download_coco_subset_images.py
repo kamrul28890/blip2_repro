@@ -26,6 +26,16 @@ def parse_args():
         help="Directory that will become repo_study/LAVIS/cache/coco/images.",
     )
     parser.add_argument(
+        "--annotation-files",
+        nargs="+",
+        default=[
+            "coco_karpathy_train_small.json",
+            "coco_karpathy_val_small.json",
+            "coco_karpathy_test_small.json",
+        ],
+        help="Annotation JSON filenames under --annotations-root to scan for image paths.",
+    )
+    parser.add_argument(
         "--workers",
         type=int,
         default=16,
@@ -46,14 +56,11 @@ def parse_args():
     return parser.parse_args()
 
 
-def collect_unique_images(annotations_root: Path) -> list[str]:
-    names = [
-        "coco_karpathy_train_small.json",
-        "coco_karpathy_val_small.json",
-        "coco_karpathy_test_small.json",
-    ]
+def collect_unique_images(
+    annotations_root: Path, annotation_files: list[str]
+) -> list[str]:
     unique_images = set()
-    for name in names:
+    for name in annotation_files:
         payload = json.loads((annotations_root / name).read_text(encoding="utf-8"))
         for row in payload:
             unique_images.add(row["image"])
@@ -99,7 +106,7 @@ def main():
     output_root = Path(args.output_root)
     output_root.mkdir(parents=True, exist_ok=True)
 
-    images = collect_unique_images(annotations_root)
+    images = collect_unique_images(annotations_root, args.annotation_files)
     print(f"unique_images={len(images)}")
 
     counters = {

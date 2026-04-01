@@ -1,0 +1,64 @@
+{
+  "ground_truth_path": "D:\\Projects\\blip2_repro\\blip2_repro-1\\repo_study\\LAVIS\\cache\\coco\\annotations\\coco_karpathy_val_office_1k_gt.json",
+  "prediction_path": "D:\\Projects\\blip2_repro\\blip2_repro-1\\repo_study\\LAVIS\\lavis\\output\\blip2_repro\\caption_office_50k_opt350m\\20260331152\\result\\val_epoch0.json",
+  "aligned_image_count": 1000,
+  "missing_in_predictions": 0,
+  "extra_predictions": 0,
+  "metrics": {
+    "Bleu_1": 0.20564677613133703,
+    "Bleu_2": 0.03856435741356125,
+    "Bleu_3": 5.7101131487411664e-08,
+    "Bleu_4": 7.184479526103155e-11,
+    "CIDEr": 0.012932109352817992
+  },
+  "diversity": {
+    "prediction_count": 1000,
+    "unique_caption_count": 106,
+    "most_common_caption": "a a a a a a a",
+    "most_common_caption_count": 690,
+    "top_5_caption_coverage": 792,
+    "top_10_caption_coverage": 850,
+    "top_captions": [
+      {
+        "caption": "a a a a a a a",
+        "count": 690
+      },
+      {
+        "caption": "a a a a a a a a a a a a a a a a a a a a a a a a a a a a a",
+        "count": 39
+      },
+      {
+        "caption": "a a a a a a a a",
+        "count": 25
+      },
+      {
+        "caption": "a a a a a a a a a",
+        "count": 24
+      },
+      {
+        "caption": "a a a a a a a a a a",
+        "count": 14
+      },
+      {
+        "caption": "a a a a a a a a a a a",
+        "count": 13
+      },
+      {
+        "caption": "a a a a with a a a a a a a a a a a a a a a a a a a a a a a a",
+        "count": 13
+      },
+      {
+        "caption": "a a a a a with a a a a a a a a a a a a a a a a a a a a a a a",
+        "count": 11
+      },
+      {
+        "caption": "a a a a a a a a a a a a a a",
+        "count": 11
+      },
+      {
+        "caption": "a a a a a a a a a a a a",
+        "count": 10
+      }
+    ]
+  }
+}

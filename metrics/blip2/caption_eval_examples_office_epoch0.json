@@ -1,0 +1,68 @@
+[
+  {
+    "image_id": 91500,
+    "references": [
+      "The two teens are playing video games in the rec center.",
+      "two people sitting in chairs playing nintendo wii ",
+      "Two men are sitting in chairs, playing a video game.",
+      "Two kids hanging out playing video games on folding chairs.",
+      "Two boys sit on chairs and play video games."
+    ],
+    "prediction": "a a a a a a a"
+  },
+  {
+    "image_id": 511622,
+    "references": [
+      "A woman in a scarf cooks using a huge ladel",
+      "A woman cooks in a large black skillet.",
+      "A person with a scarf cooking with a wok",
+      "A woman standing in a kitchen cooking food in a frying pan.",
+      "A woman cooking in a wok while wearing a scarf."
+    ],
+    "prediction": "a a a a a a a"
+  },
+  {
+    "image_id": 341113,
+    "references": [
+      "An Asian woman surfing in a wet suit.",
+      "A woman on a surfboard riding a wave",
+      "A female surfer in a wetsuit riding a big wave",
+      "A woman riding a wave on top of a surfboard.",
+      "A woman in a wet suit riding a wave on a surf board."
+    ],
+    "prediction": "a a a a a a a"
+  },
+  {
+    "image_id": 407403,
+    "references": [
+      "A painting of a white vase holding yellow tulips.",
+      "A painting of wilting yellow flowers in a jug. ",
+      "A white vase holds some pretty yellow tulips in this still life study.",
+      "A pitcher filled with yellow tulips on a black and white background.",
+      "a white vase with yellow tulips against a grey background"
+    ],
+    "prediction": "a a a a a a a a a"
+  },
+  {
+    "image_id": 353027,
+    "references": [
+      "A hand pulls a slice of mushroom pizza from the pie.",
+      "A person taking a slice of pizza to eat",
+      "A person picking up an under cooked, floppy slice of pizza.",
+      "A man pulling a slice of pizza away from a pizza.",
+      "A person grabbing a slice of pizza with cheese and mushrooms."
+    ],
+    "prediction": "a a a a a a a"
+  },
+  {
+    "image_id": 31240,
+    "references": [
+      "A train pulling out of a train station.",
+      " A man sits still in a small train.",
+      "Train parked in a train station on a small set of tracks.",
+      "A blue and red train leaving the station.",
+      "A man is driving a short train or trolley."
+    ],
+    "prediction": "train train train train train train train train train"
+  }
+]

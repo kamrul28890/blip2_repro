@@ -12,7 +12,6 @@
 
 import random
 
-import spacy
 import torch
 import torch.nn.functional as F
 from transformers import T5ForConditionalGeneration, T5Tokenizer
@@ -23,6 +22,14 @@ from lavis.models.base_model import BaseModel
 from lavis.models.blip_models.blip_image_text_matching import compute_gradcam
 
 open_pos = ["NOUN", "VERB", "ADJ", "ADV", "NUM"]
+
+try:
+    import spacy
+except Exception as exc:
+    spacy = None
+    SPACY_IMPORT_ERROR = exc
+else:
+    SPACY_IMPORT_ERROR = None
 
 
 
@@ -63,6 +70,10 @@ class Img2PromptVQA(BaseModel):
         self.question_generation_model = question_generation_model
         self.question_generation_tokenizer = question_generation_tokenizer
         self.offload_model = offload_model
+        if spacy is None:
+            raise RuntimeError(
+                "spacy is required for Img2PromptVQA but could not be imported."
+            ) from SPACY_IMPORT_ERROR
         self.nlp = spacy.load("en_core_web_sm")
 
     def forward_itm(self, samples, block_num=7):

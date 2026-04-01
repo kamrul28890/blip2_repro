@@ -82,7 +82,20 @@ class Blip2OPT(Blip2Base):
             layer.output = None
             layer.intermediate = None
 
-        self.opt_tokenizer = AutoTokenizer.from_pretrained(opt_model, use_fast=False)
+        try:
+            self.opt_tokenizer = AutoTokenizer.from_pretrained(
+                opt_model, use_fast=False
+            )
+        except TypeError as exc:
+            logging.warning(
+                "Falling back to the fast OPT tokenizer for %s after slow tokenizer "
+                "init failed: %s",
+                opt_model,
+                exc,
+            )
+            self.opt_tokenizer = AutoTokenizer.from_pretrained(
+                opt_model, use_fast=True
+            )
         self.opt_model = OPTForCausalLM.from_pretrained(
             opt_model, torch_dtype=torch.float16
         )

@@ -1,0 +1,64 @@
+{
+  "ground_truth_path": "D:\\Projects\\blip2_repro\\blip2_repro-1\\repo_study\\LAVIS\\cache\\coco\\annotations\\coco_karpathy_val_office_1k_gt.json",
+  "prediction_path": "D:\\Projects\\blip2_repro\\blip2_repro-1\\repo_study\\LAVIS\\lavis\\output\\blip2_repro\\caption_office_50k_opt350m_polish\\20260401094\\result\\val_epoch4.json",
+  "aligned_image_count": 1000,
+  "missing_in_predictions": 0,
+  "extra_predictions": 0,
+  "metrics": {
+    "Bleu_1": 0.537792919706812,
+    "Bleu_2": 0.3347529785656224,
+    "Bleu_3": 0.1916288492742949,
+    "Bleu_4": 0.10492754123672476,
+    "CIDEr": 0.37143173656021033
+  },
+  "diversity": {
+    "prediction_count": 1000,
+    "unique_caption_count": 607,
+    "most_common_caption": "a woman holding a baby in her arms",
+    "most_common_caption_count": 27,
+    "top_5_caption_coverage": 98,
+    "top_10_caption_coverage": 156,
+    "top_captions": [
+      {
+        "caption": "a woman holding a baby in her arms",
+        "count": 27
+      },
+      {
+        "caption": "a bathroom with a sink and toilet",
+        "count": 20
+      },
+      {
+        "caption": "a computer with a keyboard and mouse",
+        "count": 18
+      },
+      {
+        "caption": "a skateboarder riding a skateboard",
+        "count": 17
+      },
+      {
+        "caption": "a bathroom with a toilet and sink",
+        "count": 16
+      },
+      {
+        "caption": "a tennis player playing a tennis game",
+        "count": 13
+      },
+      {
+        "caption": "a dog is sitting on a chair",
+        "count": 13
+      },
+      {
+        "caption": "a car is parked on a street",
+        "count": 12
+      },
+      {
+        "caption": "a cat is sitting on a chair",
+        "count": 10
+      },
+      {
+        "caption": "a car is parked on the street",
+        "count": 10
+      }
+    ]
+  }
+}

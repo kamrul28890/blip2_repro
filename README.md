@@ -30,24 +30,24 @@ The main project result is a complete three-stage BLIP-2 pipeline reproduction o
 
 ## Final Outcome
 
-The local reproduction completed successfully and produced all three checkpoints, but the final caption quality is far below the BLIP-2 paper.
+The local reproduction completed successfully and produced all three checkpoints. The best office-scale caption result is still below the BLIP-2 paper, but it is much stronger than the earlier reduced local baseline.
 
 Final local evaluation summary:
 
-- BLEU-1: `33.40`
-- BLEU-2: `10.66`
-- BLEU-3: `3.45`
-- BLEU-4: `1.45`
-- CIDEr: `3.03`
-- unique captions across 1000 predictions: `61`
+- BLEU-1: `53.86`
+- BLEU-2: `33.52`
+- BLEU-3: `19.65`
+- BLEU-4: `11.13`
+- CIDEr: `37.57`
+- unique captions across 1000 predictions: `563`
 
 The exact evaluation artifact is:
 
-- `metrics/blip2/caption_eval_summary.json`
+- `metrics/blip2/caption_eval_summary_office_epoch3.json`
 
 Representative qualitative failures are stored in:
 
-- `metrics/blip2/caption_eval_examples.json`
+- `metrics/blip2/caption_eval_examples_office_epoch3.json`
 
 ## Important Clone Note
 

@@ -1,0 +1,68 @@
+model:
+  arch: blip2_opt
+  model_type: pretrain_opt2.7b
+  load_pretrained: true
+  load_finetuned: false
+  pretrained: "REPLACE_WITH_STAGE1_CHECKPOINT"
+  vit_model: "clip_L"
+  image_size: 224
+  freeze_vit: true
+  use_grad_checkpoint: false
+  vit_precision: "fp16"
+  num_query_token: 32
+  opt_model: "facebook/opt-350m"
+  prompt: ""
+
+datasets:
+  coco_caption:
+    vis_processor:
+      train:
+        name: "blip2_image_train"
+        image_size: 224
+      eval:
+        name: "blip_image_eval"
+        image_size: 224
+    text_processor:
+      train:
+        name: "blip_caption"
+      eval:
+        name: "blip_caption"
+    build_info:
+      annotations:
+        train:
+          url: "REPLACED_BY_RUNNER"
+          storage: "REPLACED_BY_RUNNER"
+        val:
+          url: "REPLACED_BY_RUNNER"
+          storage: "REPLACED_BY_RUNNER"
+        test:
+          url: "REPLACED_BY_RUNNER"
+          storage: "REPLACED_BY_RUNNER"
+      images:
+        storage: "REPLACED_BY_RUNNER"
+
+run:
+  task: image_text_pretrain
+  lr_sched: "linear_warmup_cosine_lr"
+  init_lr: 1e-4
+  min_lr: 1e-5
+  warmup_lr: 1e-6
+  warmup_steps: 50
+  weight_decay: 0.05
+  max_epoch: 3
+  batch_size_train: 1
+  batch_size_eval: 1
+  accum_grad_iters: 8
+  num_workers: 2
+  seed: 42
+  output_dir: "output/blip2_repro/stage2_office_50k_opt350m"
+  amp: true
+  resume_ckpt_path: null
+  evaluate: false
+  train_splits: ["train"]
+  valid_splits: []
+  test_splits: []
+  device: "cuda"
+  world_size: 1
+  dist_url: "env://"
+  distributed: false

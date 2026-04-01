@@ -20,7 +20,7 @@
 \maketitle
 
 \begin{abstract}
-This report follows the term-paper workflow of reading, critiquing, implementing, and evaluating recent NLP and multimodal papers. I study three candidate papers: BLIP-2, LLaVA, and VisionLLM v2. The critique focuses on their architectural ideas, training data, compute requirements, openness, and reproducibility under student-level hardware constraints. Based on that analysis, I select BLIP-2 as the implementation target because its modular design gives the best chance of reproducing the core method under limited compute. I then build a full local BLIP-2 pipeline on a single NVIDIA RTX 3070 8GB GPU using the official LAVIS codebase, reduced COCO Karpathy splits, CLIP-L, and OPT-350M. The reproduction successfully completes all three major stages: stage-1 representation learning, stage-2 generative alignment, and caption fine-tuning, and produces valid checkpoints for each stage. However, the final captioning quality is far below the paper's full-scale COCO result. On a reduced 1,000-image validation subset, the final successful local checkpoint reaches BLEU-4 of 1.45 and CIDEr of 3.03 when reported on the same paper-style scale as BLIP-2's COCO table, compared with BLIP-2 ViT-g OPT2.7B's reported BLEU-4 of 43.7 and CIDEr of 145.8 on the Karpathy COCO test split. I argue that the reproduction is successful at the pipeline level but not at the performance-parity level, and I analyze the main reasons for that gap.
+This report follows the term-paper workflow of reading, critiquing, implementing, and evaluating recent NLP and multimodal papers. I study three candidate papers: BLIP-2, LLaVA, and VisionLLM v2. The critique focuses on their architectural ideas, training data, compute requirements, openness, and reproducibility under student-level hardware constraints. Based on that analysis, I select BLIP-2 as the implementation target because its modular design gives the best chance of reproducing the core method under limited compute. I then build a full local BLIP-2 pipeline on a single NVIDIA RTX 3070 8GB GPU using the official LAVIS codebase, reduced COCO Karpathy splits, CLIP-L, and OPT-350M. The reproduction successfully completes all three major stages: stage-1 representation learning, stage-2 generative alignment, and caption fine-tuning, and produces valid checkpoints for each stage. However, the final captioning quality is still below the paper's full-scale COCO result. On an office-scale 50k/1k/1k COCO Karpathy subset, the best local validation snapshot reaches BLEU-4 of 11.13 and CIDEr of 37.57 when reported on the same paper-style scale as BLIP-2's COCO table, compared with BLIP-2 ViT-g OPT2.7B's reported BLEU-4 of 43.7 and CIDEr of 145.8 on the Karpathy COCO test split. I argue that the reproduction is successful at the pipeline level but not at the performance-parity level, and I analyze the main reasons for that gap.
 \end{abstract}
 
 \section{Introduction}
@@ -81,7 +81,7 @@ The goal of the implementation was not to exactly match the paper's full trainin
 The local implementation uses the official LAVIS BLIP-2 code path, but with carefully chosen reductions and fixes so that the full pipeline can run on a single RTX 3070 8GB GPU.
 
 \subsection{Experimental Setup}
-The final setup is intentionally much smaller than the paper's. I use the workspace virtual environment, the official LAVIS implementation, and reduced COCO Karpathy splits of 10,000 train, 1,000 validation, and 1,000 test samples. The local model uses CLIP-L as the vision encoder, OPT-350M as the language model, image resolution 224, batch size 1, gradient accumulation 16, and one epoch for each stage. The successful caption fine-tuning run uses a subset-matched validation annotation file and disables unstable Windows METEOR scoring during checkpoint generation.
+The final setup is intentionally much smaller than the paper's. I use the workspace virtual environment, the official LAVIS implementation, and an office-scale reduced COCO Karpathy subset of 50,000 train, 1,000 validation, and 1,000 test samples. The local model uses CLIP-L as the vision encoder, OPT-350M as the language model, image resolution 224, batch size 1, and gradient accumulation 8. The stage-1 and stage-2 runs each use 3 epochs, while caption fine-tuning uses a 5-epoch schedule. The successful caption runs use a subset-matched validation annotation file and disable unstable Windows METEOR scoring during checkpoint generation.
 
 Table~\ref{tab:setup-compare} shows why the local run should be interpreted as a scaled reproduction rather than a full replication.
 
@@ -92,12 +92,12 @@ Table~\ref{tab:setup-compare} shows why the local run should be interpreted as a
 \toprule
 Dimension & BLIP-2 paper configuration & Local reproduction \\
 \midrule
-Pre-training data & 129M image-text pairs from COCO, VG, CC3M, CC12M, SBU, and LAION subsets \citep{li2023blip2} & Reduced COCO Karpathy subset only (10k train / 1k val / 1k test) \\
-Bridge training schedule & 250k steps stage 1, 80k steps stage 2 \citep{li2023blip2} & 1 epoch per stage \\
-Caption fine-tuning schedule & 5 epochs, batch size 256, image resolution 364 \citep{li2023blip2} & 1 epoch, batch size 1 with grad accumulation 16, image resolution 224 \\
+Pre-training data & 129M image-text pairs from COCO, VG, CC3M, CC12M, SBU, and LAION subsets \citep{li2023blip2} & Reduced COCO Karpathy subset only (50k train / 1k val / 1k test) \\
+Bridge training schedule & 250k steps stage 1, 80k steps stage 2 \citep{li2023blip2} & 3 epochs for stage 1 and 3 epochs for stage 2 \\
+Caption fine-tuning schedule & 5 epochs, batch size 256, image resolution 364 \citep{li2023blip2} & 5 epochs, batch size 1 with grad accumulation 8, image resolution 224 \\
 Vision encoder & ViT-g/14 in the reported OPT2.7B captioning result \citep{li2023blip2} & CLIP ViT-L \\
 Language model & OPT-2.7B for the best reported OPT caption result \citep{li2023blip2} & OPT-350M \\
-Compute & Largest model pre-training on a 16-A100(40G) machine, $<$6 days first stage and $<$3 days second stage \citep{li2023blip2} & One RTX 3070 8GB; full local three-stage wall-clock about 1h 28m 53s \\
+Compute & Largest model pre-training on a 16-A100(40G) machine, $<$6 days first stage and $<$3 days second stage \citep{li2023blip2} & One RTX 3070 8GB; office-scale stage 1, stage 2, and caption runs completed locally across multi-hour supervised sessions, with the final caption polish rerun taking 5h 59m 50s \\
 \bottomrule
 \end{tabularx}
 \caption{Original paper configuration versus the local reproduction.}
@@ -131,13 +131,13 @@ This engineering work matters for the assignment because it demonstrates that th
 \paragraph{Training outcomes.}
 The full local pipeline completed successfully and produced valid checkpoints for all three stages. The stage-wise training losses were:
 \begin{itemize}
-\item Stage 1: train loss 0.326, with ITC 0.343, ITM 0.360, and LM 4.518
-\item Stage 2: train loss 0.294
-\item Caption fine-tuning: train loss 0.227
+\item Stage 1 office run: train loss 0.412, with ITC 0.214, ITM 0.054, and LM 3.031
+\item Stage 2 office run: train loss 0.767
+\item Caption fine-tuning: epoch-3 train loss 0.367 on the best-metric office run, and 0.362 at epoch 4 on the clean polish rerun
 \end{itemize}
 
 \paragraph{Captioning metrics.}
-For the final caption result file, I ran a reduced evaluation path on the 1,000-image validation subset that computes BLEU and CIDEr while avoiding the unstable METEOR path on Windows. Because \texttt{report\_metric=false} was required during the successful checkpoint-producing run, the BLEU/CIDEr results were computed afterward from the saved \texttt{val\_epoch0.json} file using the official \texttt{pycocoevalcap} BLEU and CIDEr implementations with a subset-matched ground-truth file. I report BLEU and CIDEr on the same paper-style $\times 100$ scale used in the BLIP-2 captioning table. The full local metric vector is BLEU-1 33.40, BLEU-2 10.66, BLEU-3 3.45, BLEU-4 1.45, and CIDEr 3.03. Table~\ref{tab:metrics} compares the directly comparable local metrics against the paper's reported COCO captioning result for BLIP-2 ViT-g OPT2.7B.
+For the final caption comparison, I ran a reduced evaluation path on the 1,000-image validation subset that computes BLEU and CIDEr while avoiding the unstable METEOR path on Windows. Because \texttt{report\_metric=false} was required during the checkpoint-producing runs, the BLEU/CIDEr results were computed afterward from the saved validation prediction files using the official \texttt{pycocoevalcap} BLEU and CIDEr implementations with a subset-matched ground-truth file. I report BLEU and CIDEr on the same paper-style $\times 100$ scale used in the BLIP-2 captioning table. The best local metric vector comes from the office-scale run's \texttt{val\_epoch3.json}: BLEU-1 53.86, BLEU-2 33.52, BLEU-3 19.65, BLEU-4 11.13, and CIDEr 37.57. A later clean polish rerun completed through epoch 4 but scored slightly worse, so epoch 3 remains the best local checkpoint by validation metrics. Table~\ref{tab:metrics} compares the directly comparable local metrics against the paper's reported COCO captioning result for BLIP-2 ViT-g OPT2.7B.
 
 \begin{table}[t]
 \centering
@@ -146,18 +146,18 @@ For the final caption result file, I ran a reduced evaluation path on the 1,000-
 \toprule
 Metric & Paper & Local \\
 \midrule
-BLEU-4 & 43.7 & 1.45 \\
-CIDEr & 145.8 & 3.03 \\
+BLEU-4 & 43.7 & 11.13 \\
+CIDEr & 145.8 & 37.57 \\
 \bottomrule
 \end{tabular}
-\caption{Captioning comparison between the BLIP-2 paper's COCO fine-tuned ViT-g OPT2.7B result and the local reduced-subset reproduction. The numbers are not directly comparable because the local run uses a smaller model, a smaller dataset, fewer epochs, lower image resolution, and a different evaluation split.}
+\caption{Captioning comparison between the BLIP-2 paper's COCO fine-tuned ViT-g OPT2.7B result and the local office-scale reduced-subset reproduction. The numbers are not directly comparable because the local run uses a smaller model, a smaller dataset, lower image resolution, and a different evaluation split.}
 \label{tab:metrics}
 \end{table}
 
 The gap is extremely large, but it is not surprising. The local system is weaker in every major dimension: the image encoder, the language model, the amount of stage-1/2 training, the amount of caption fine-tuning, the image resolution, and the data scale.
 
 \paragraph{Qualitative behavior.}
-The final caption file also reveals a strong mode-collapse failure. Out of 1,000 predictions, there are only 61 unique captions. The most common caption appears 251 times, the top 5 captions account for 661 outputs, and the top 10 account for 799 outputs. This means the model is not only low-scoring; it is also highly degenerate as a generator.
+The best local caption file still shows visible degeneration, but it is substantially less collapsed than the earlier small-run baseline. Out of 1,000 predictions, there are 563 unique captions. The most common caption appears 27 times, the top 5 captions account for 113 outputs, and the top 10 account for 176 outputs. This means the model remains weaker than the paper, but it is no longer trapped in the severe low-diversity regime seen in the earlier reduced run.
 
 Table~\ref{tab:qualitative} shows representative examples. The generated captions are often generic person-centric templates that ignore the actual image content.
 
