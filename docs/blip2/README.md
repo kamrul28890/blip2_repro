@@ -13,6 +13,9 @@ This folder tracks the BLIP-2 local reproduction environment, installation work,
 - Stage 3: complete with a local stage-1 checkpoint
 - Stage 4: complete with a local stage-2 checkpoint
 - Stage 5: complete with a local caption checkpoint
+- Office-scale `50k / 1k / 1k` run family: complete
+- Best current validation snapshot: office `epoch3`, `BLEU-4 11.13`, `CIDEr 37.57`
+- Next planned experiment family: student-scale `100k / 1k / 1k`
 
 ## Verified Outcomes
 
@@ -69,6 +72,8 @@ This folder tracks the BLIP-2 local reproduction environment, installation work,
 - `install_progress.md`
 - `failures_and_fixes.md`
 - `data_layout.md`
+- `experiment_ledger.md`
+- `scholar_runbook.md`
 - `experiment_stages.md`
 - `change_log.md`
 - `next_steps.md`
@@ -88,4 +93,4 @@ This folder tracks the BLIP-2 local reproduction environment, installation work,
 1. Use the repo-level `README.md` and `paper/SUBMISSION_NOTES.md` as the publish / handoff entry points.
 2. After cloning with Git LFS, run `blip2_repro/scripts/reassemble_stage1_checkpoint.ps1` if you need the stage-1 checkpoint file restored from its split publish-safe artifact form.
 3. If you want a stronger local model, move to the `*_better_local.yaml` configs and the guidance in `docs/blip2/improvement_playbook.md`.
-4. If you want a stronger hardware run, reuse the same scripts and patches instead of rebuilding the workflow from scratch.
+4. If you want a stronger hardware run, use `docs/blip2/scholar_runbook.md` plus the `student_100k` configs and Scholar submit scripts instead of rebuilding the workflow from scratch.

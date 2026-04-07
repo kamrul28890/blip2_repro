@@ -2,11 +2,20 @@ param(
     [string]$LavisRoot = (Resolve-Path "$PSScriptRoot\..\..\repo_study\LAVIS").Path,
     [string]$ConfigPath = (Resolve-Path "$PSScriptRoot\..\configs\stage1_local.yaml").Path,
     [string]$PythonExe = (Resolve-Path "$PSScriptRoot\..\..\.venv\Scripts\python.exe").Path,
+    [string]$ResumeCheckpoint = "",
     [string]$TrainAnnotationPath = (Resolve-Path "$PSScriptRoot\..\..\repo_study\LAVIS\cache\coco\annotations\coco_karpathy_train_small.json").Path,
     [string]$ValAnnotationPath = (Resolve-Path "$PSScriptRoot\..\..\repo_study\LAVIS\cache\coco\annotations\coco_karpathy_val_small.json").Path,
     [string]$TestAnnotationPath = (Resolve-Path "$PSScriptRoot\..\..\repo_study\LAVIS\cache\coco\annotations\coco_karpathy_test_small.json").Path,
     [string]$ImagesRoot = (Resolve-Path "$PSScriptRoot\..\..\repo_study\LAVIS\cache\coco\images").Path
 )
+
+$ResumeCheckpointNormalized = ""
+if ($ResumeCheckpoint) {
+    if (-not (Test-Path $ResumeCheckpoint)) {
+        throw "Resume checkpoint not found: $ResumeCheckpoint"
+    }
+    $ResumeCheckpointNormalized = ((Resolve-Path $ResumeCheckpoint).Path) -replace "\\", "/"
+}
 
 $TrainAnnotation = ((Resolve-Path $TrainAnnotationPath).Path) -replace "\\", "/"
 $ValAnnotation = ((Resolve-Path $ValAnnotationPath).Path) -replace "\\", "/"
@@ -22,6 +31,10 @@ $Options = @(
     "datasets.coco_caption.build_info.annotations.test.storage=$TestAnnotation",
     "datasets.coco_caption.build_info.images.storage=$ImagesRoot"
 )
+
+if ($ResumeCheckpointNormalized) {
+    $Options += "run.resume_ckpt_path=$ResumeCheckpointNormalized"
+}
 
 Push-Location $LavisRoot
 try {

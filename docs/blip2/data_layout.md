@@ -13,6 +13,14 @@ repo_study/LAVIS/cache/coco/
     coco_karpathy_train_small.json
     coco_karpathy_val_small.json
     coco_karpathy_test_small.json
+    coco_karpathy_train_office_50k.json
+    coco_karpathy_val_office_1k.json
+    coco_karpathy_test_office_1k.json
+    coco_karpathy_val_office_1k_gt.json
+    coco_karpathy_train_student_100k.json
+    coco_karpathy_val_student_1k.json
+    coco_karpathy_test_student_1k.json
+    coco_karpathy_val_student_1k_gt.json
   images/
     train2014/
     val2014/
@@ -25,6 +33,14 @@ repo_study/LAVIS/cache/coco/
   - `coco_karpathy_train_small.json`: `10000`
   - `coco_karpathy_val_small.json`: `1000`
   - `coco_karpathy_test_small.json`: `1000`
+- Office subset counts:
+  - `coco_karpathy_train_office_50k.json`: `50000`
+  - `coco_karpathy_val_office_1k.json`: `1000`
+  - `coco_karpathy_test_office_1k.json`: `1000`
+- Planned student-scale subset counts:
+  - `coco_karpathy_train_student_100k.json`: `100000`
+  - `coco_karpathy_val_student_1k.json`: `1000`
+  - `coco_karpathy_test_student_1k.json`: `1000`
 - Image root exists: `repo_study/LAVIS/cache/coco/images`
 - Image folder counts:
   - `train2014`: `7066`

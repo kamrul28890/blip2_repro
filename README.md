@@ -49,6 +49,10 @@ Representative qualitative failures are stored in:
 
 - `metrics/blip2/caption_eval_examples_office_epoch3.json`
 
+The report-safe comparison ledger is stored in:
+
+- `docs/blip2/experiment_ledger.md`
+
 ## Important Clone Note
 
 This repo uses Git LFS for the staged COCO images and BLIP-2 checkpoint artifacts.
@@ -152,14 +156,16 @@ The main knobs are:
 The detailed playbook is here:
 
 - `docs/blip2/improvement_playbook.md`
+- `docs/blip2/scholar_runbook.md`
 
 If you have a stronger GPU or multiple GPUs, the easiest path is:
 
 1. keep the same scripts,
 2. point them at the stronger config files or your own edited configs,
-3. replace the checkpoint arguments with your paths,
-4. increase dataset size and epochs,
-5. optionally swap `opt-350m` for a larger LM if your hardware allows it.
+3. use the new `student_100k` config family as the default next step,
+4. replace the checkpoint arguments with your paths,
+5. increase dataset size and epochs,
+6. optionally swap `opt-350m` for a larger LM if your hardware allows it.
 
 ## Documentation Index
 
@@ -172,6 +178,8 @@ If you have a stronger GPU or multiple GPUs, the easiest path is:
 - change log: `docs/blip2/change_log.md`
 - next steps: `docs/blip2/next_steps.md`
 - improvement guide: `docs/blip2/improvement_playbook.md`
+- experiment ledger: `docs/blip2/experiment_ledger.md`
+- Scholar runbook: `docs/blip2/scholar_runbook.md`
 
 ## Paper And Submission Assets
 

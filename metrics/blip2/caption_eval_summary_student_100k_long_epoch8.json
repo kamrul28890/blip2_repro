@@ -1,0 +1,64 @@
+{
+  "ground_truth_path": "D:\\Projects\\blip2_repro\\blip2_repro-1\\repo_study\\LAVIS\\cache\\coco\\annotations\\coco_karpathy_val_student_1k_gt.json",
+  "prediction_path": "D:\\Projects\\blip2_repro\\blip2_repro-1\\repo_study\\LAVIS\\lavis\\output\\blip2_repro\\caption_student_100k_opt350m_long\\20260405100\\result\\val_epoch8.json",
+  "aligned_image_count": 1000,
+  "missing_in_predictions": 0,
+  "extra_predictions": 0,
+  "metrics": {
+    "Bleu_1": 0.42185835603243127,
+    "Bleu_2": 0.22667171480757536,
+    "Bleu_3": 0.12107780430871647,
+    "Bleu_4": 0.06689297542347752,
+    "CIDEr": 0.17593981664560332
+  },
+  "diversity": {
+    "prediction_count": 1000,
+    "unique_caption_count": 719,
+    "most_common_caption": "a woman with a baby in her arms",
+    "most_common_caption_count": 24,
+    "top_5_caption_coverage": 61,
+    "top_10_caption_coverage": 93,
+    "top_captions": [
+      {
+        "caption": "a woman with a baby in her arms",
+        "count": 24
+      },
+      {
+        "caption": "a clock and a clock tower.",
+        "count": 11
+      },
+      {
+        "caption": "the same thing happened to me.",
+        "count": 9
+      },
+      {
+        "caption": "a man with a gun in his hand",
+        "count": 9
+      },
+      {
+        "caption": "a man with a gun in his hand.",
+        "count": 8
+      },
+      {
+        "caption": "a photo of a photo of a photo of a photo of a photo of a photo of a photo of a photo of a photo of a photo",
+        "count": 7
+      },
+      {
+        "caption": "a woman with a baby in her arms.",
+        "count": 7
+      },
+      {
+        "caption": "the sun is shining in the sky",
+        "count": 6
+      },
+      {
+        "caption": "a pair of zebras in a field",
+        "count": 6
+      },
+      {
+        "caption": "a dog is sitting on a chair",
+        "count": 6
+      }
+    ]
+  }
+}

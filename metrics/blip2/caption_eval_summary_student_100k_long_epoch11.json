@@ -1,0 +1,64 @@
+{
+  "ground_truth_path": "D:\\Projects\\blip2_repro\\blip2_repro-1\\repo_study\\LAVIS\\cache\\coco\\annotations\\coco_karpathy_val_student_1k_gt.json",
+  "prediction_path": "D:\\Projects\\blip2_repro\\blip2_repro-1\\repo_study\\LAVIS\\lavis\\output\\blip2_repro\\caption_student_100k_opt350m_long\\20260405100\\result\\val_epoch11.json",
+  "aligned_image_count": 1000,
+  "missing_in_predictions": 0,
+  "extra_predictions": 0,
+  "metrics": {
+    "Bleu_1": 0.42130433816438195,
+    "Bleu_2": 0.23339661836357783,
+    "Bleu_3": 0.12447241208163007,
+    "Bleu_4": 0.06676811755071273,
+    "CIDEr": 0.1942592470094344
+  },
+  "diversity": {
+    "prediction_count": 1000,
+    "unique_caption_count": 740,
+    "most_common_caption": "the same thing happened to me.",
+    "most_common_caption_count": 17,
+    "top_5_caption_coverage": 70,
+    "top_10_caption_coverage": 98,
+    "top_captions": [
+      {
+        "caption": "the same thing happened to me.",
+        "count": 17
+      },
+      {
+        "caption": "a woman with a baby in her arms.",
+        "count": 15
+      },
+      {
+        "caption": "a woman with a baby in her arms",
+        "count": 15
+      },
+      {
+        "caption": "a man with a gun in his hand.",
+        "count": 13
+      },
+      {
+        "caption": "a man with a gun in his hand",
+        "count": 10
+      },
+      {
+        "caption": "a group of people walking along a street",
+        "count": 6
+      },
+      {
+        "caption": "a pair of zebras in a field",
+        "count": 6
+      },
+      {
+        "caption": "a picture of a house that I love.",
+        "count": 6
+      },
+      {
+        "caption": "the ball is in the air.",
+        "count": 5
+      },
+      {
+        "caption": "a plate of a plate of a plate of a plate of a plate of a plate of a plate of a plate of a plate of a plate",
+        "count": 5
+      }
+    ]
+  }
+}

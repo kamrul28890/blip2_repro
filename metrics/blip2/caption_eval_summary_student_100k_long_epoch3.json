@@ -1,0 +1,64 @@
+{
+  "ground_truth_path": "D:\\Projects\\blip2_repro\\blip2_repro-1\\repo_study\\LAVIS\\cache\\coco\\annotations\\coco_karpathy_val_student_1k_gt.json",
+  "prediction_path": "D:\\Projects\\blip2_repro\\blip2_repro-1\\repo_study\\LAVIS\\lavis\\output\\blip2_repro\\caption_student_100k_opt350m_long\\20260405100\\result\\val_epoch3.json",
+  "aligned_image_count": 1000,
+  "missing_in_predictions": 0,
+  "extra_predictions": 0,
+  "metrics": {
+    "Bleu_1": 0.4638172264223995,
+    "Bleu_2": 0.26455249620452964,
+    "Bleu_3": 0.14597732790177856,
+    "Bleu_4": 0.08093529333441898,
+    "CIDEr": 0.22249627093427954
+  },
+  "diversity": {
+    "prediction_count": 1000,
+    "unique_caption_count": 700,
+    "most_common_caption": "a bathroom with a sink and toilet",
+    "most_common_caption_count": 18,
+    "top_5_caption_coverage": 67,
+    "top_10_caption_coverage": 112,
+    "top_captions": [
+      {
+        "caption": "a bathroom with a sink and toilet",
+        "count": 18
+      },
+      {
+        "caption": "a dog is sitting on a chair",
+        "count": 14
+      },
+      {
+        "caption": "a woman with a baby in her arms",
+        "count": 13
+      },
+      {
+        "caption": "a man with his hands in the air.",
+        "count": 12
+      },
+      {
+        "caption": "a tennis player is on the court",
+        "count": 10
+      },
+      {
+        "caption": "a bowl of lettuce on a plate",
+        "count": 10
+      },
+      {
+        "caption": "a guy with a skateboard.",
+        "count": 9
+      },
+      {
+        "caption": "a group of people walking on the beach",
+        "count": 9
+      },
+      {
+        "caption": "a woman is sitting on a chair",
+        "count": 9
+      },
+      {
+        "caption": "a man is walking down the street",
+        "count": 8
+      }
+    ]
+  }
+}

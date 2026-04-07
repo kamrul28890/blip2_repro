@@ -1,0 +1,64 @@
+{
+  "ground_truth_path": "D:\\Projects\\blip2_repro\\blip2_repro-1\\repo_study\\LAVIS\\cache\\coco\\annotations\\coco_karpathy_val_student_1k_gt.json",
+  "prediction_path": "D:\\Projects\\blip2_repro\\blip2_repro-1\\repo_study\\LAVIS\\lavis\\output\\blip2_repro\\caption_student_100k_opt350m_long\\20260405100\\result\\val_epoch10.json",
+  "aligned_image_count": 1000,
+  "missing_in_predictions": 0,
+  "extra_predictions": 0,
+  "metrics": {
+    "Bleu_1": 0.4264017459269049,
+    "Bleu_2": 0.23244258618650165,
+    "Bleu_3": 0.1237211868789783,
+    "Bleu_4": 0.06833451608813729,
+    "CIDEr": 0.18737667921484719
+  },
+  "diversity": {
+    "prediction_count": 1000,
+    "unique_caption_count": 762,
+    "most_common_caption": "a woman with a baby in her arms",
+    "most_common_caption_count": 18,
+    "top_5_caption_coverage": 58,
+    "top_10_caption_coverage": 85,
+    "top_captions": [
+      {
+        "caption": "a woman with a baby in her arms",
+        "count": 18
+      },
+      {
+        "caption": "a man with a gun in his hand.",
+        "count": 15
+      },
+      {
+        "caption": "a woman with a baby in her arms.",
+        "count": 9
+      },
+      {
+        "caption": "a bowl of rice on a plate",
+        "count": 9
+      },
+      {
+        "caption": "the same thing happened to me.",
+        "count": 7
+      },
+      {
+        "caption": "a photo of a photo of a photo of a photo of a photo of a photo of a photo of a photo of a photo of a photo",
+        "count": 6
+      },
+      {
+        "caption": "a man with a gun in his hand",
+        "count": 6
+      },
+      {
+        "caption": "a few times in a row.",
+        "count": 5
+      },
+      {
+        "caption": "a pair of zebras in a field",
+        "count": 5
+      },
+      {
+        "caption": "a cat sitting on a chair.",
+        "count": 5
+      }
+    ]
+  }
+}

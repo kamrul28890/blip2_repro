@@ -18,4 +18,18 @@ paper/*.bbl
 paper/*.blg
 paper/*.log
 paper/*.out
+paper/*.fdb_latexmk
+paper/*.fls
+paper/*.synctex.gz
 paper/*_pdfcheck.txt
+
+# Local dataset cache should stay off GitHub.
+repo_study/LAVIS/cache/coco/images/
+
+# Keep lightweight logs/results, but ignore heavyweight checkpoint sweeps by default.
+repo_study/LAVIS/lavis/output/blip2_repro/**/checkpoint_*.pth
+repo_study/LAVIS/lavis/output/blip2_repro/**/checkpoint_*.pt
+repo_study/LAVIS/lavis/output/blip2_repro/**/checkpoint_*.bin
+repo_study/LAVIS/lavis/output/blip2_repro/**/checkpoint_*.part*
+
+tmp/

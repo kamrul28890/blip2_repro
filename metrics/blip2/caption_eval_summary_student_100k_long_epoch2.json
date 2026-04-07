@@ -1,0 +1,64 @@
+{
+  "ground_truth_path": "D:\\Projects\\blip2_repro\\blip2_repro-1\\repo_study\\LAVIS\\cache\\coco\\annotations\\coco_karpathy_val_student_1k_gt.json",
+  "prediction_path": "D:\\Projects\\blip2_repro\\blip2_repro-1\\repo_study\\LAVIS\\lavis\\output\\blip2_repro\\caption_student_100k_opt350m_long\\20260405100\\result\\val_epoch2.json",
+  "aligned_image_count": 1000,
+  "missing_in_predictions": 0,
+  "extra_predictions": 0,
+  "metrics": {
+    "Bleu_1": 0.47626950302037174,
+    "Bleu_2": 0.27811037984502923,
+    "Bleu_3": 0.15949073296123814,
+    "Bleu_4": 0.0856724443201162,
+    "CIDEr": 0.2534078818528672
+  },
+  "diversity": {
+    "prediction_count": 1000,
+    "unique_caption_count": 677,
+    "most_common_caption": "a bathroom with a sink and toilet",
+    "most_common_caption_count": 20,
+    "top_5_caption_coverage": 65,
+    "top_10_caption_coverage": 104,
+    "top_captions": [
+      {
+        "caption": "a bathroom with a sink and toilet",
+        "count": 20
+      },
+      {
+        "caption": "a woman with a baby in her arms",
+        "count": 15
+      },
+      {
+        "caption": "a bowl of broccoli on a plate",
+        "count": 11
+      },
+      {
+        "caption": "a group of people walking on a beach",
+        "count": 10
+      },
+      {
+        "caption": "a group of people walking on the beach",
+        "count": 9
+      },
+      {
+        "caption": "a kitchen with a sink and a microwave",
+        "count": 9
+      },
+      {
+        "caption": "a tennis player playing a tennis ball",
+        "count": 8
+      },
+      {
+        "caption": "a young child playing with a toy",
+        "count": 8
+      },
+      {
+        "caption": "a cat sitting on the floor.",
+        "count": 7
+      },
+      {
+        "caption": "a dog is sitting on a chair",
+        "count": 7
+      }
+    ]
+  }
+}

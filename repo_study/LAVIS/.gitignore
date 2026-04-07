@@ -163,8 +163,10 @@ cache/
 !cache/coco/
 !cache/coco/annotations/
 !cache/coco/annotations/**
-!cache/coco/images/
-!cache/coco/images/**
 !lavis/output/
 !lavis/output/blip2_repro/
 !lavis/output/blip2_repro/**
+lavis/output/blip2_repro/**/checkpoint_*.pth
+lavis/output/blip2_repro/**/checkpoint_*.pt
+lavis/output/blip2_repro/**/checkpoint_*.bin
+lavis/output/blip2_repro/**/checkpoint_*.part*

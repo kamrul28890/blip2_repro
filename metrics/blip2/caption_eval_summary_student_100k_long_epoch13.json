@@ -1,0 +1,64 @@
+{
+  "ground_truth_path": "D:\\Projects\\blip2_repro\\blip2_repro-1\\repo_study\\LAVIS\\cache\\coco\\annotations\\coco_karpathy_val_student_1k_gt.json",
+  "prediction_path": "D:\\Projects\\blip2_repro\\blip2_repro-1\\repo_study\\LAVIS\\lavis\\output\\blip2_repro\\caption_student_100k_opt350m_long\\20260405100\\result\\val_epoch13.json",
+  "aligned_image_count": 1000,
+  "missing_in_predictions": 0,
+  "extra_predictions": 0,
+  "metrics": {
+    "Bleu_1": 0.4376347085414425,
+    "Bleu_2": 0.24275145956362387,
+    "Bleu_3": 0.13196458808292652,
+    "Bleu_4": 0.07392252245940338,
+    "CIDEr": 0.19986809706110067
+  },
+  "diversity": {
+    "prediction_count": 1000,
+    "unique_caption_count": 723,
+    "most_common_caption": "a woman with a baby in her arms.",
+    "most_common_caption_count": 19,
+    "top_5_caption_coverage": 72,
+    "top_10_caption_coverage": 110,
+    "top_captions": [
+      {
+        "caption": "a woman with a baby in her arms.",
+        "count": 19
+      },
+      {
+        "caption": "a woman with a baby in her arms",
+        "count": 19
+      },
+      {
+        "caption": "a man with a gun in his hand.",
+        "count": 14
+      },
+      {
+        "caption": "a man with a gun in his hand",
+        "count": 12
+      },
+      {
+        "caption": "a picture of a house that I love.",
+        "count": 8
+      },
+      {
+        "caption": "a bowl of rice on a plate",
+        "count": 8
+      },
+      {
+        "caption": "a plane flying over the sky.",
+        "count": 8
+      },
+      {
+        "caption": "a clock and a clock tower.",
+        "count": 8
+      },
+      {
+        "caption": "a man and a woman on a beach.",
+        "count": 7
+      },
+      {
+        "caption": "the same thing happened to me.",
+        "count": 7
+      }
+    ]
+  }
+}

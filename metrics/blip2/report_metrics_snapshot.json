@@ -1,0 +1,135 @@
+{
+  "created_at": "2026-04-01",
+  "paper_reference": {
+    "model": "BLIP-2 ViT-g OPT2.7B",
+    "dataset": "COCO Karpathy captioning table",
+    "metric_scale": "paper_x100",
+    "metrics_x100": {
+      "Bleu_4": 43.7,
+      "CIDEr": 145.8
+    },
+    "source_path": "paper/term_paper.tex"
+  },
+  "local_baseline_10k": {
+    "dataset_counts": {
+      "train": 10000,
+      "val": 1000,
+      "test": 1000
+    },
+    "schedule": {
+      "stage1_epochs": 1,
+      "stage2_epochs": 1,
+      "caption_epochs": 1
+    },
+    "stage_losses": {
+      "stage1_train_loss": 0.326,
+      "stage2_train_loss": 0.294,
+      "caption_train_loss": 0.227
+    },
+    "metrics_raw": {
+      "Bleu_1": 0.33397578133546324,
+      "Bleu_2": 0.1065595428132206,
+      "Bleu_3": 0.03453019250838613,
+      "Bleu_4": 0.014517364208935334,
+      "CIDEr": 0.030293416112162366
+    },
+    "metrics_x100": {
+      "Bleu_1": 33.4,
+      "Bleu_2": 10.66,
+      "Bleu_3": 3.45,
+      "Bleu_4": 1.45,
+      "CIDEr": 3.03
+    },
+    "diversity": {
+      "unique_caption_count": 61,
+      "most_common_caption_count": 251,
+      "top_5_caption_coverage": 661,
+      "top_10_caption_coverage": 799
+    },
+    "summary_path": "metrics/blip2/caption_eval_summary.json",
+    "examples_path": "metrics/blip2/caption_eval_examples.json"
+  },
+  "local_office_best_50k": {
+    "dataset_counts": {
+      "train": 50000,
+      "val": 1000,
+      "test": 1000
+    },
+    "schedule": {
+      "stage1_epochs": 3,
+      "stage2_epochs": 3,
+      "caption_epochs_completed": 4,
+      "best_caption_epoch": 3
+    },
+    "stage_losses": {
+      "stage1_train_loss_by_epoch": [
+        0.525,
+        0.454,
+        0.412
+      ],
+      "stage2_train_loss_by_epoch": [
+        0.473,
+        0.802,
+        0.767
+      ]
+    },
+    "metrics_raw": {
+      "Bleu_1": 0.5386392609713047,
+      "Bleu_2": 0.33523951535079555,
+      "Bleu_3": 0.1965291229720781,
+      "Bleu_4": 0.11129056228831784,
+      "CIDEr": 0.3756940351624028
+    },
+    "metrics_x100": {
+      "Bleu_1": 53.86,
+      "Bleu_2": 33.52,
+      "Bleu_3": 19.65,
+      "Bleu_4": 11.13,
+      "CIDEr": 37.57
+    },
+    "diversity": {
+      "unique_caption_count": 563,
+      "most_common_caption_count": 27
+    },
+    "summary_path": "metrics/blip2/caption_eval_summary_office_epoch3.json",
+    "examples_path": "metrics/blip2/caption_eval_examples_office_epoch3.json"
+  },
+  "local_office_polish_final_50k": {
+    "dataset_counts": {
+      "train": 50000,
+      "val": 1000,
+      "test": 1000
+    },
+    "schedule": {
+      "caption_epochs_completed": 5,
+      "saved_final_epoch": 4
+    },
+    "metrics_raw": {
+      "Bleu_4": 0.10492754123672476,
+      "CIDEr": 0.37143173656021033
+    },
+    "metrics_x100": {
+      "Bleu_4": 10.49,
+      "CIDEr": 37.14
+    },
+    "summary_path": "metrics/blip2/caption_eval_summary_office_polish_epoch4.json"
+  },
+  "planned_student_scale_100k": {
+    "dataset_counts": {
+      "train": 100000,
+      "val": 1000,
+      "test": 1000
+    },
+    "schedule": {
+      "stage1_epochs": 5,
+      "stage2_epochs": 5,
+      "caption_epochs": 8
+    },
+    "configs": [
+      "blip2_repro/configs/stage1_student_100k.yaml",
+      "blip2_repro/configs/stage2_student_100k_opt350m.yaml",
+      "blip2_repro/configs/caption_student_100k_opt350m.yaml"
+    ],
+    "runbook_path": "docs/blip2/scholar_runbook.md"
+  }
+}

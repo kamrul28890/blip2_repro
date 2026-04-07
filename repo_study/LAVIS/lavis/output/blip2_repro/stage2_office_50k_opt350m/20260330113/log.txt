@@ -1,0 +1,116 @@
+{
+    "run": {
+        "task": "image_text_pretrain",
+        "lr_sched": "linear_warmup_cosine_lr",
+        "init_lr": 0.0001,
+        "min_lr": 1e-05,
+        "warmup_lr": 1e-06,
+        "warmup_steps": 50,
+        "weight_decay": 0.05,
+        "max_epoch": 3,
+        "batch_size_train": 1,
+        "batch_size_eval": 1,
+        "accum_grad_iters": 8,
+        "num_workers": 2,
+        "seed": 42,
+        "output_dir": "output/blip2_repro/stage2_office_50k_opt350m",
+        "amp": true,
+        "resume_ckpt_path": null,
+        "evaluate": false,
+        "train_splits": [
+            "train"
+        ],
+        "valid_splits": [],
+        "test_splits": [],
+        "device": "cuda",
+        "world_size": 1,
+        "dist_url": "env://",
+        "distributed": false
+    },
+    "model": {
+        "arch": "blip2_opt",
+        "load_finetuned": false,
+        "pretrained": "D:/Projects/blip2_repro/blip2_repro-1/repo_study/LAVIS/lavis/output/blip2_repro/stage1_office_50k/20260329192/checkpoint_2.pth",
+        "finetuned": "",
+        "image_size": 224,
+        "drop_path_rate": 0,
+        "use_grad_checkpoint": false,
+        "vit_precision": "fp16",
+        "freeze_vit": true,
+        "num_query_token": 32,
+        "opt_model": "facebook/opt-350m",
+        "prompt": "",
+        "model_type": "pretrain_opt2.7b",
+        "load_pretrained": true,
+        "vit_model": "clip_L"
+    },
+    "preprocess": {
+        "vis_processor": {
+            "train": {
+                "name": "blip_image_train",
+                "image_size": 224
+            },
+            "eval": {
+                "name": "blip_image_eval",
+                "image_size": 224
+            }
+        },
+        "text_processor": {
+            "train": {
+                "name": "blip_caption"
+            },
+            "eval": {
+                "name": "blip_caption"
+            }
+        }
+    },
+    "datasets": {
+        "coco_caption": {
+            "dataset_card": "dataset_card/coco_caption.md",
+            "data_type": "images",
+            "build_info": {
+                "annotations": {
+                    "train": {
+                        "url": "D:/Projects/blip2_repro/blip2_repro-1/repo_study/LAVIS/cache/coco/annotations/coco_karpathy_train_office_50k.json",
+                        "md5": "aa31ac474cf6250ebb81d18348a07ed8",
+                        "storage": "D:/Projects/blip2_repro/blip2_repro-1/repo_study/LAVIS/cache/coco/annotations/coco_karpathy_train_office_50k.json"
+                    },
+                    "val": {
+                        "url": "D:/Projects/blip2_repro/blip2_repro-1/repo_study/LAVIS/cache/coco/annotations/coco_karpathy_val_office_1k.json",
+                        "md5": "b273847456ef5580e33713b1f7de52a0",
+                        "storage": "D:/Projects/blip2_repro/blip2_repro-1/repo_study/LAVIS/cache/coco/annotations/coco_karpathy_val_office_1k.json"
+                    },
+                    "test": {
+                        "url": "D:/Projects/blip2_repro/blip2_repro-1/repo_study/LAVIS/cache/coco/annotations/coco_karpathy_test_office_1k.json",
+                        "md5": "3ff34b0ef2db02d01c37399f6a2a6cd1",
+                        "storage": "D:/Projects/blip2_repro/blip2_repro-1/repo_study/LAVIS/cache/coco/annotations/coco_karpathy_test_office_1k.json"
+                    }
+                },
+                "images": {
+                    "storage": "D:/Projects/blip2_repro/blip2_repro-1/repo_study/LAVIS/cache/coco/images"
+                }
+            },
+            "vis_processor": {
+                "train": {
+                    "name": "blip2_image_train",
+                    "image_size": 224
+                },
+                "eval": {
+                    "name": "blip_image_eval",
+                    "image_size": 224
+                }
+            },
+            "text_processor": {
+                "train": {
+                    "name": "blip_caption"
+                },
+                "eval": {
+                    "name": "blip_caption"
+                }
+            }
+        }
+    }
+}
+{"train_lr": "0.000", "train_loss": "0.473"}
+{"train_lr": "0.000", "train_loss": "0.802"}
+{"train_lr": "0.000", "train_loss": "0.767"}

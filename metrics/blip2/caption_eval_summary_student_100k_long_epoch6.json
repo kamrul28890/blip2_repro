@@ -1,0 +1,64 @@
+{
+  "ground_truth_path": "D:\\Projects\\blip2_repro\\blip2_repro-1\\repo_study\\LAVIS\\cache\\coco\\annotations\\coco_karpathy_val_student_1k_gt.json",
+  "prediction_path": "D:\\Projects\\blip2_repro\\blip2_repro-1\\repo_study\\LAVIS\\lavis\\output\\blip2_repro\\caption_student_100k_opt350m_long\\20260405100\\result\\val_epoch6.json",
+  "aligned_image_count": 1000,
+  "missing_in_predictions": 0,
+  "extra_predictions": 0,
+  "metrics": {
+    "Bleu_1": 0.4592246557631665,
+    "Bleu_2": 0.26391877550993065,
+    "Bleu_3": 0.14673229418773032,
+    "Bleu_4": 0.08044635048957477,
+    "CIDEr": 0.23933095673325994
+  },
+  "diversity": {
+    "prediction_count": 1000,
+    "unique_caption_count": 744,
+    "most_common_caption": "a woman with a baby in her arms",
+    "most_common_caption_count": 16,
+    "top_5_caption_coverage": 61,
+    "top_10_caption_coverage": 92,
+    "top_captions": [
+      {
+        "caption": "a woman with a baby in her arms",
+        "count": 16
+      },
+      {
+        "caption": "a skateboard and a skateboard",
+        "count": 14
+      },
+      {
+        "caption": "a bathroom with a sink and toilet",
+        "count": 13
+      },
+      {
+        "caption": "a group of people walking on the beach",
+        "count": 10
+      },
+      {
+        "caption": "a photo of a photo of a photo of a photo of a photo of a photo of a photo of a photo of a photo of a photo",
+        "count": 8
+      },
+      {
+        "caption": "a woman with a baby in her arms.",
+        "count": 8
+      },
+      {
+        "caption": "a few times in a row.",
+        "count": 6
+      },
+      {
+        "caption": "a woman holding a baby in her arms",
+        "count": 6
+      },
+      {
+        "caption": "a clock and a clock tower.",
+        "count": 6
+      },
+      {
+        "caption": "a group of people eating at a restaurant",
+        "count": 5
+      }
+    ]
+  }
+}
