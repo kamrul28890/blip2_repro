@@ -14,14 +14,20 @@
 
 \newcolumntype{Y}{>{\raggedright\arraybackslash}X}
 
-\title{Critique of Recent Vision-Language Papers and a Local Reproduction of BLIP-2}
+\title{From Modular Alignment to Generalist Perception:\\
+A Critique of Three Multimodal Systems and a\\
+Student-Scale Reproduction of BLIP-2}
 \author{Anonymous}
 
 \begin{document}
 \maketitle
 
 \begin{abstract}
-This report follows the term-paper workflow of reading, critiquing, implementing, and evaluating recent NLP and multimodal papers. I study three candidate papers: BLIP-2, LLaVA, and VisionLLM v2. The critique focuses on architecture, supervision strategy, compute requirements, openness, and reproducibility under student-level hardware constraints. Based on that analysis, I select BLIP-2 as the implementation target because its modular design offers the strongest downscaling story: a frozen image encoder, a frozen language model, and a relatively small trainable bridge. I then build a local BLIP-2 reproduction on a single NVIDIA RTX 3070 8GB GPU using the official LAVIS codebase, reduced COCO Karpathy subsets, CLIP-L, and OPT-350M. The reproduction successfully completes all three major stages of the BLIP-2 pipeline: stage-1 representation learning, stage-2 generative alignment, and caption fine-tuning, and it produces valid checkpoints and caption outputs for each stage. On an office-scale 50k/1k/1k COCO Karpathy subset, the best completed local validation snapshot reaches BLEU-4 of 11.13 and CIDEr of 37.57 when reported on the same paper-style scale as BLIP-2's COCO table, compared with BLIP-2 ViT-g OPT2.7B's reported BLEU-4 of 43.7 and CIDEr of 145.8 on the Karpathy COCO test split. A larger 100k student-scale run was also completed with a longer \texttt{10 / 10 / 15} schedule, but its best validation checkpoint peaked early at epoch 2 with BLEU-4 8.57 and CIDEr 25.34 and therefore did not surpass the earlier 50k office-scale best. The main conclusion is that BLIP-2 is reproducible at the pipeline level on student hardware, but not reproducible at paper-level caption quality without large-scale data, compute, and backbone capacity.
+This report studies three influential multimodal systems---BLIP-2, LLaVA, and VisionLLM v2---through the dual lens of architectural critique and student-scale reproducibility. The central comparative claim is that these papers form a progression from modular bridge-based alignment, to instruction-tuned assistant behavior, to end-to-end generalist perception, and that each step toward broader capability comes with a corresponding increase in compute dependence and engineering complexity. Based on that analysis, I select BLIP-2 as the implementation target because its frozen-backbone design preserves the clearest downscaling story under constrained hardware.
+
+I then build a local BLIP-2 reproduction on a single NVIDIA RTX 3070 8GB GPU using the official LAVIS codebase, reduced COCO Karpathy subsets, CLIP-L, and OPT-350M. The reproduction completes all three training stages of the BLIP-2 pipeline and produces valid checkpoints and caption outputs for each stage. On the strongest completed local run, a 50k/1k/1k office-scale COCO Karpathy subset, the best validation checkpoint reaches BLEU-4 11.13 and CIDEr 37.57 on the paper-style $\times 100$ scale, compared with BLIP-2 ViT-g OPT-2.7B's reported BLEU-4 43.7 and CIDEr 145.8 on the Karpathy COCO test split. A larger 100k student-scale run also completed successfully, but its best checkpoint peaked early at epoch 2 with BLEU-4 8.57 and CIDEr 25.34 and did not surpass the earlier 50k best.
+
+The evidence therefore supports a calibrated two-part conclusion. First, the BLIP-2 \emph{pipeline} is reproducible on student hardware after moderate engineering work. Second, BLIP-2's \emph{captioning quality} remains strongly scale-bound with respect to backbone size, optimization budget, and evaluation setting. The project is thus best understood as a successful pipeline reproduction with a substantial and informative performance gap.
 \end{abstract}
 
 \section{Introduction}
@@ -34,6 +40,13 @@ My final implementation target is BLIP-2. The reason is not that it is easy in a
 The central claim of this report is that BLIP-2 is reproducible at the \emph{pipeline} level on student hardware, but not reproducible at the \emph{performance} level without paper-scale data, compute, and backbones. The project therefore asks two questions at once: whether the official training path can be made to run end to end in a constrained local environment, and how far the resulting system remains from the published captioning performance after aggressive reductions in scale.
 
 More specifically, the report contributes four things. First, it provides a comparative critique of three recent multimodal papers through the lens of student-scale reproducibility. Second, it documents a local end-to-end BLIP-2 reproduction built from the official LAVIS codebase rather than from a simplified reimplementation. Third, it records the engineering changes required to make that pipeline run reliably on a single non-distributed Windows workstation. Fourth, it analyzes the resulting metric gap as an empirical finding about scaling, not merely as a missing optimization detail. This framing matters because the final value of the project lies as much in the methodology and artifact trail as in the absolute caption score.
+
+\section{Related Work and Positioning}
+The three selected papers occupy distinct positions in the current multimodal design space. BLIP-2 emphasizes modular alignment: a trainable Q-Former bridge sits between frozen visual and language backbones \citep{li2023blip2}. LLaVA emphasizes assistant-style behavior through instruction tuning on GPT-generated multimodal supervision \citep{liu2023visual}. VisionLLM v2 pushes toward a unified generalist system that routes a central multimodal language model into multiple task-specific decoders \citep{wu2024visionllmv2}. Taken together, they form a useful progression from narrow but modular alignment, to conversational multimodal assistants, to broad end-to-end perception and generation.
+
+BLIP-2 is especially important in relation to neighboring bridge-based work. Compared with Flamingo, which interleaves visual information into language modeling at large scale, BLIP-2 makes the cross-modal interface more explicit through a query bottleneck \citep{alayrac2022flamingo}. Compared with the original BLIP framework, which couples understanding and generation more tightly inside a unified vision-language stack, BLIP-2 leans further into frozen-backbone reuse and isolates learning in a smaller bridge module \citep{li2022blip}. That architectural separation is the key reason it remains scientifically meaningful after aggressive downscaling.
+
+This positioning matters for a reproduction project because openness alone is not enough. A candidate method must also remain interpretable after scale reduction. BLIP-2 satisfies that requirement best: even when the backbones and datasets are reduced, the core methodological question---whether a lightweight bridge can make frozen unimodal models interact productively---still survives. LLaVA and VisionLLM v2 are both valuable comparison points, but their strongest results depend more heavily on instruction-data pipelines or multi-decoder system breadth that are harder to reproduce faithfully in a single-GPU environment.
 
 \section{Paper Critique}
 \subsection{BLIP-2}
@@ -279,6 +292,40 @@ Run & Scale & Selection & BLEU-4 & CIDEr & Unique caps \\
 \label{tab:internal-scaling}
 \end{table*}
 
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{figures/caption_epoch_trajectories.pdf}
+\caption{Caption metric trajectories from completed runs. The 50k curve uses the original office run for epochs 0--3 and the clean 50k caption-polish rerun for epoch 4; the 100k curve uses the completed long-run checkpoints through epoch 14. Both panels show that the 100k run peaks early and then degrades, which is why best-checkpoint selection by validation CIDEr matters materially.}
+\label{fig:caption-trajectories}
+\end{figure*}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{figures/training_loss_trajectories.pdf}
+\caption{Stage-1 and stage-2 train-loss trajectories for the 50k office run and the completed 100k long run. The 100k losses continue to decrease smoothly, so the later captioning degradation is better described as an optimization-selection mismatch or overtraining effect than as a gross training failure in the bridge stages.}
+\label{fig:loss-trajectories}
+\end{figure*}
+
+\subsubsection{Completed Evidence on the 100k Failure Question}
+The most useful low-cost evidence for the ``100k failure'' question comes from the runs that already exist rather than from new retraining. Table~\ref{tab:failure-evidence} isolates the comparisons that are already supported by completed artifacts. The table does not claim to answer every possible counterfactual. In particular, a dedicated \texttt{100k} shorter-schedule run and a lower-learning-rate stage-2 rerun remain future work. What it does show is that the current failure pattern is consistent with an optimization-selection problem layered on top of scale increase: the 100k run is operationally stable, but its best checkpoint occurs early and later checkpoints drift downward.
+
+\begin{table*}[t]
+\centering
+\small
+\begin{tabularx}{\textwidth}{p{3.2cm} p{2.2cm} p{1.3cm} p{1.3cm} Y}
+\toprule
+Completed comparison & Selection rule & BLEU-4 & CIDEr & Interpretation \\
+\midrule
+\texttt{50k} office best & best epoch 3 & 11.13 & 37.57 & Strongest completed local caption result; serves as the best stable reference point. \\
+\texttt{50k} longer caption schedule & final epoch 4 (polish rerun) & 10.49 & 37.14 & Extending caption training slightly past the best 50k checkpoint does not improve metrics, which argues against ``more epochs always help.'' \\
+\texttt{100k} long run with early-stop selection & best epoch 2 by CIDEr & 8.57 & 25.34 & The larger run does produce a meaningful early checkpoint, but it still underperforms the 50k office best. \\
+\texttt{100k} long run without early-stop selection & final epoch 14 & 6.61 & 18.36 & Accepting the last checkpoint would materially understate the best performance reached in the 100k run. \\
+\bottomrule
+\end{tabularx}
+\caption{Completed-run evidence relevant to the 100k failure question. These rows use only existing artifacts and therefore avoid introducing new training-heavy ablations into the paper.}
+\label{tab:failure-evidence}
+\end{table*}
+
 \subsubsection{Best Checkpoint Selection During Training}
 Yes, it is possible to select the best checkpoint during training rather than simply taking the last epoch, and in this project that distinction turned out to matter. Because the local Windows caption runs used \texttt{report\_metric=false} to avoid unstable online METEOR scoring, each caption epoch saved both a checkpoint and a corresponding \texttt{val\_epoch*.json} prediction file. After training, I evaluated every saved validation epoch offline on the same 1,000-image subset and selected the best checkpoint by validation CIDEr, using BLEU-4 and caption diversity as supporting diagnostics rather than as the primary selector.
 
@@ -348,19 +395,81 @@ The project also contains a systems-validity issue that is easy to overlook. Bec
 
 There is also a model-selection validity issue. The best local caption checkpoints are selected by validation CIDEr on the same 1,000-image subset used throughout the study. This is reasonable for a reproduction report, but it means that the paper compares the best local validation snapshot against the published paper result rather than against an untouched held-out test set under identical model-selection rules. The main conclusions are still informative, but they should be read as careful reproduction evidence rather than as benchmark-equivalent leaderboard claims.
 
+\begin{table*}[t]
+\centering
+\small
+\begin{tabularx}{\textwidth}{p{3.0cm} p{1.4cm} Y}
+\toprule
+Threat & Severity & Why it matters \\
+\midrule
+Split mismatch & High & Local metrics are computed on reduced 1k validation subsets, while the BLIP-2 paper reports Karpathy test results. Internal comparisons remain valid, but paper-to-local score gaps should not be interpreted as leaderboard-equivalent. \\
+Validation-based model selection & Medium & Choosing the best checkpoint by validation CIDEr is methodologically sensible for this report, but it can bias the final reported local metric upward relative to a pure last-checkpoint or held-out-test protocol. \\
+Windows metric-path fragility & Medium & The final checkpoint-producing runs required an offline BLEU/CIDEr path because the stock Windows metric workflow, especially METEOR, was unstable. This preserves reproducibility but changes the operational evaluation path. \\
+Single-seed estimates & High & All reported runs are single-seed estimates, so the observed ranking between 50k and 100k should be interpreted as evidence from one completed trajectory rather than as a variance-robust statistical claim. \\
+\bottomrule
+\end{tabularx}
+\caption{Explicit severity labels for the main threats to validity. The architecture mismatch against ViT-g and OPT-2.7B remains an additional interpretive constraint, but the four items above are the highest-risk threats for understanding the reported metrics.}
+\label{tab:validity-threats}
+\end{table*}
+
 \section{Reproducibility and Artifacts}
 One strength of this project is that the reproduction process is documented as an artifact set rather than as a single narrative result. The repository contains the local configs, stage launchers, data-subset tools, evaluation scripts, run registries, progress registries, checkpoint registries, failure notes, and paper-facing metric summaries needed to inspect or continue the work. In particular, the files under \texttt{blip2\_repro/configs/}, \texttt{blip2\_repro/scripts/}, \texttt{docs/blip2/}, and \texttt{metrics/blip2/} together describe the operational history of the project at a much finer granularity than is possible inside the paper alone.
 
 This artifact trail matters for two reasons. First, it makes the project auditable: the reported caption metrics can be traced back to specific saved prediction files and subset-matched ground-truth files. Second, it makes the work extensible: later runs, including the completed \texttt{100k} long-run desktop pipeline, are direct continuations of the same codebase rather than separate ad hoc experiments. The project therefore contributes not only a result, but a reusable student-scale BLIP-2 reproduction scaffold. From a thesis-style perspective, this is important because the scientific contribution is partly methodological and infrastructural, not only numerical.
 
-\section{Conclusion}
-Among the three selected papers, BLIP-2 was the best implementation target because it is modular, open, and still intellectually coherent after aggressive downscaling. LLaVA is a strong alternative when moderate cluster compute is available, while VisionLLM v2 is too heavy for this assignment without major institutional infrastructure.
+\section{Discussion}
+One of the clearest lessons from this project is the distinction between \emph{pipeline reproducibility} and \emph{performance reproducibility}. At the pipeline level, the answer is positive: after targeted engineering fixes, the official BLIP-2 path can be run end to end on a single consumer GPU, with recoverable checkpoints and reproducible offline evaluation. At the performance level, the answer is more limited. The local system remains far below the paper's captioning quality even after meaningful improvement from \texttt{10k} to \texttt{50k}. Treating those as separate outcomes makes the result easier to interpret and more scientifically useful.
 
-The local BLIP-2 reproduction successfully completed stage-1 representation learning, stage-2 generative alignment, and caption fine-tuning on a single RTX 3070 8GB GPU. This satisfies the implementation requirement as a non-trivial reproduction of the core method. However, the completed local results do not approach the paper's reported captioning quality. The quantitative and qualitative evidence instead shows that the model remains substantially weaker than the published BLIP-2 captioning system, even after meaningful improvement from the \texttt{10k} baseline to the \texttt{50k} office run.
+The non-monotonic 100k result sharpens that distinction. The longer 100k run is not evidence that the local BLIP-2 reproduction is broken. Rather, it shows that additional data and longer schedules do not automatically convert a student-scale architecture into a paper-scale captioner. The caption trajectory in Figure~\ref{fig:caption-trajectories} and the bridge-stage loss curves in Figure~\ref{fig:loss-trajectories} together suggest a more precise reading: the run remains operationally stable, but later caption checkpoints become worse than earlier ones, so model selection and schedule design matter as much as raw runtime.
+
+\section{Conclusion}
+Among the three selected papers, BLIP-2 remains the best implementation target for this assignment because it is modular, open, and still intellectually coherent after aggressive downscaling. LLaVA is a strong alternative when moderate cluster compute is available, while VisionLLM v2 is too heavy for this assignment without major institutional infrastructure.
+
+The local BLIP-2 reproduction successfully completed stage-1 representation learning, stage-2 generative alignment, and caption fine-tuning on a single RTX 3070 8GB GPU. This satisfies the implementation requirement as a non-trivial reproduction of the core method. However, the completed local results do not approach the paper's reported captioning quality. The quantitative and qualitative evidence instead suggests that the model remains substantially weaker than the published BLIP-2 captioning system, even after meaningful improvement from the \texttt{10k} baseline to the \texttt{50k} office run.
 
 The completed \texttt{100k} long run sharpens that conclusion rather than overturning it. It shows that more data and a much longer schedule can increase caption diversity and sustain the pipeline at larger scale, but they do not automatically yield better caption metrics under a fixed student-scale architecture. In this project, the best \texttt{100k} checkpoint still underperformed the earlier \texttt{50k} office best, and the last \texttt{100k} checkpoint was worse still. Therefore, model selection by best validation metric is essential, and the final result should be understood as the best checkpoint reached during training rather than the last checkpoint saved.
 
 Therefore, the main conclusion of this project is twofold. First, BLIP-2's \emph{pipeline} is reproducible at small scale. Second, BLIP-2's \emph{performance} depends strongly on the scale of the frozen backbones, pre-training data, fine-tuning budget, model-selection strategy, and evaluation environment. That contrast is itself a useful research lesson, and it helps explain why paper-level multimodal performance remains difficult to reproduce faithfully on commodity hardware.
+
+\appendix
+\section{Appendix: Reproducibility Notes}
+\subsection{Metric Commands and Path Normalization}
+The reported metric JSON files were produced with the local offline evaluator \texttt{blip2\_repro/tools/evaluate\_caption\_subset.py}. Representative commands are:
+\begin{itemize}
+\item office best epoch 3:
+\begin{quote}\ttfamily
+python blip2\_repro/tools/evaluate\_caption\_subset.py\\
+--gt \path{repo_study/LAVIS/cache/coco/annotations/coco_karpathy_val_office_1k_gt.json}\\
+--pred \path{repo_study/LAVIS/lavis/output/blip2_repro/caption_office_50k_opt350m/20260331152/result/val_epoch3.json}\\
+--output \path{metrics/blip2/caption_eval_summary_office_epoch3.json}\\
+--examples-output \path{metrics/blip2/caption_eval_examples_office_epoch3.json}
+\end{quote}
+\item office polish final epoch 4:
+\begin{quote}\ttfamily
+python blip2\_repro/tools/evaluate\_caption\_subset.py\\
+--gt \path{repo_study/LAVIS/cache/coco/annotations/coco_karpathy_val_office_1k_gt.json}\\
+--pred \path{repo_study/LAVIS/lavis/output/blip2_repro/caption_office_50k_opt350m_polish/20260401094/result/val_epoch4.json}\\
+--output \path{metrics/blip2/caption_eval_summary_office_polish_epoch4.json}
+\end{quote}
+\item student 100k best epoch 2:
+\begin{quote}\ttfamily
+python blip2\_repro/tools/evaluate\_caption\_subset.py\\
+--gt \path{repo_study/LAVIS/cache/coco/annotations/coco_karpathy_val_student_1k_gt.json}\\
+--pred \path{repo_study/LAVIS/lavis/output/blip2_repro/caption_student_100k_opt350m_long/20260405100/result/val_epoch2.json}\\
+--output \path{metrics/blip2/caption_eval_summary_student_100k_long_epoch2.json}
+\end{quote}
+\end{itemize}
+
+Because artifacts were moved across multiple Windows workstations during the project, some saved metric files still contain absolute source paths from earlier machines. For reproducibility, the stable identifiers are the repository-relative locations of the ground-truth file, prediction file, and output summary. When moving artifacts, those relative paths should be normalized first and the stale absolute prefixes should be treated as provenance rather than as required runtime paths.
+
+\subsection{Minimum Rerun Recipe}
+For a reviewer who wants the shortest end-to-end confirmation path rather than the strongest metric result, the minimum rerun recipe is the local \texttt{10k / 1k / 1k} pipeline:
+\begin{enumerate}
+\item run the local stage-1 config to produce the bridge checkpoint;
+\item run stage 2 from that checkpoint with OPT-350M;
+\item run the local caption fine-tuning stage and then score the saved \texttt{val\_epoch0.json} file with the offline evaluator above.
+\end{enumerate}
+This recipe is much cheaper than the completed \texttt{50k} and \texttt{100k} runs, but it is still sufficient to verify the three-stage BLIP-2 training path, checkpoint production, and offline evaluation workflow.
 
 \bibliography{term_paper}
 
